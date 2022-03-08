@@ -11,20 +11,18 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * 代表商店檔案細節部分寫入
+ *
  * @author MouBieCat
  */
-public final class ShopSectionWriter {
+public record ShopSectionWriter(@NotNull Loader loader) {
 
     private static final String SHOP_TITLE_PATH = "Shop.title";
 
     private static final String SHOP_GIVE_ITEM_PATH = "Shop.give_item";
 
-    // 檔案加載器
-    @NotNull
-    private final Loader loader;
-
     /**
      * 建構子
+     *
      * @param loader 檔案加載器
      */
     public ShopSectionWriter(final @NotNull Loader loader) {
@@ -36,7 +34,7 @@ public final class ShopSectionWriter {
      * @param title 標題
      */
     public void setShopTitle(final @NotNull String title) {
-        this.loader.set(SHOP_TITLE_PATH, ChatColor.translateAlternateColorCodes('&', Utils.forMessageToRGB(title)));
+        this.loader.set(SHOP_TITLE_PATH, title);
         this.loader.save();
     }
 
@@ -77,6 +75,7 @@ public final class ShopSectionWriter {
 
         /**
          * 建構子
+         *
          * @param loader 檔案加載器
          */
         public ShopBuySectionWriter(final @NotNull Loader loader) {
@@ -88,7 +87,7 @@ public final class ShopSectionWriter {
      * 代表商店購買所需的條件部分讀取(Minecraft)
      * @author MouBieCat
      */
-    public static class ShopMinecraftBuySectionWriter
+    public final static class ShopMinecraftBuySectionWriter
             extends ShopBuySectionWriter {
 
         private static final String SHOP_BUY_MINECRAFT_EXP_PATH = "Shop.buy.MINECRAFT.exp";
@@ -106,19 +105,19 @@ public final class ShopSectionWriter {
 
         /**
          * 添加一個購買所需的物品
-         * @param key 物品路徑示標符
+         * @param key  物品路徑示標符
          * @param item 物品
          */
-        public void addShopBuyItems(final @NotNull String key, final @NotNull ItemStack item) {
+        public boolean addShopBuyItems(final @NotNull String key, final @NotNull ItemStack item) {
             final String keyPath = SHOP_BUY_MINECRAFT_ITEMS_PATH + "." + key;
 
-            if (this.loader.getConfiguration().contains(SHOP_BUY_MINECRAFT_ITEMS_PATH + key))
-                MouBieCat.getInstance().getDebugger().warning("§c您的商店配置包含了 §6" + keyPath + " §c部分，但是檔案配置已經包含了該示標符。");
-
-            else {
+            if (!this.loader.getConfiguration().contains(SHOP_BUY_MINECRAFT_ITEMS_PATH + key)) {
                 this.loader.set(keyPath, item);
                 this.loader.save();
+                return true;
             }
+
+            return false;
         }
 
         /**
@@ -148,10 +147,10 @@ public final class ShopSectionWriter {
      * 代表商店購買所需的條件部分讀取(Plugin)
      * @author MouBieCat
      */
-    public static class ShopPluginBuySectionWriter
+    public final static class ShopPluginBuySectionWriter
             extends ShopBuySectionWriter {
 
-        private static final String SHOP_BUY_PLUGIN_PLAYER_POINT_PATH = "Shop.buy.PLUGIN.PlayerPoint";
+        private static final String SHOP_BUY_PLUGIN_PLAYER_POINT_PATH = "Shop.buy.PLUGIN.PlayerPoints";
 
         /**
          * 建構子
@@ -165,13 +164,9 @@ public final class ShopSectionWriter {
          * 寫入購買所需的 PlayerPoint 插件點數
          * @param point 插件點數
          */
-        public void setShopPlayerPoint(final int point) {
-            if (this.isHookPlugin("PlayerPoint")) {
-                this.loader.set(SHOP_BUY_PLUGIN_PLAYER_POINT_PATH, point);
-                this.loader.save();
-            }
-
-            MouBieCat.getInstance().getDebugger().warning("§c您的商店配置包含了 §6" + SHOP_BUY_PLUGIN_PLAYER_POINT_PATH + " §c部分，但是您的伺服器沒有裝載 §6PlayerPoints §c插件。");
+        public void setShopPlayerPoints(final int point) {
+            this.loader.set(SHOP_BUY_PLUGIN_PLAYER_POINT_PATH, point);
+            this.loader.save();
         }
 
         /**

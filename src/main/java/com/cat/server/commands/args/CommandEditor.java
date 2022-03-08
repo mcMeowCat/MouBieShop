@@ -1,20 +1,21 @@
 package com.cat.server.commands.args;
 
 import com.cat.server.MouBieCat;
+import com.cat.server.commands.args.attributes.PlayerEditorCache;
 import com.cat.server.shop.Shop;
 import com.moubieapi.api.commands.SenderType;
 import com.moubieapi.moubieapi.commands.CommandNodeAbstract;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 創建商店指令
+ * 選定編輯的商店指令
  * @author MouBieCat
  */
-public final class CommandCreate
+public final class CommandEditor
         extends CommandNodeAbstract {
 
     /**
@@ -22,8 +23,8 @@ public final class CommandCreate
      * @param nodeId      當前節點列數
      * @param nodeName    節點名稱
      */
-    public CommandCreate(final int nodeId, final @NotNull String nodeName) {
-        super(nodeId, nodeName, "MouBieShop.create", SenderType.PLAYER_SENDER, "用於創建商店指令參數。", 2);
+    public CommandEditor(final int nodeId, final @NotNull String nodeName) {
+        super(nodeId, nodeName, "MouBieShop.editor", SenderType.PLAYER_SENDER, "用於選定編輯的商店指令參數。", 2);
     }
 
     /**
@@ -34,15 +35,14 @@ public final class CommandCreate
      */
     public boolean onCommand(final @NotNull CommandSender sender, final @NotNull String[] args) {
         final Shop shop = MouBieCat.getInstance().getShopManager().get(args[1]);
-        if (shop != null)
-            sender.sendMessage(MouBieCat.PLUGIN_TITLE + "§c很抱歉，該商店名稱已經存在。");
 
-        else {
-            MouBieCat.getInstance().getShopManager().add(args[1], new Shop(args[1]));
-            sender.sendMessage(MouBieCat.PLUGIN_TITLE + "§f完成，商店成功被創建。");
+        if (shop != null) {
+            PlayerEditorCache.get((Player) sender).shop = shop;
+            sender.sendMessage(MouBieCat.PLUGIN_TITLE + "§f您成功選定該商店作為編輯目標，目前正在編輯 §6" + shop.getName() + " §f商店。");
             return true;
         }
 
+        sender.sendMessage(MouBieCat.PLUGIN_TITLE + "§c很抱歉，該商店名稱不存在，因此無法選擇該商店作為編輯目標。");
         return false;
     }
 
@@ -54,7 +54,10 @@ public final class CommandCreate
      */
     @NotNull
     public List<String> onTab(final @NotNull CommandSender sender, final @NotNull String[] args) {
-        return new ArrayList<>();
+        return MouBieCat.getInstance().getShopManager().getValues()
+                .stream()
+                .map(Shop::getName)
+                .toList();
     }
 
 }

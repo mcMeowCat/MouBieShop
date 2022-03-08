@@ -1,7 +1,9 @@
 package com.cat.server.commands;
 
 import com.cat.server.MouBieCat;
+import com.cat.server.commands.args.CommandAttributes;
 import com.cat.server.commands.args.CommandCreate;
+import com.cat.server.commands.args.CommandEditor;
 import com.moubieapi.api.commands.CommandNode;
 import com.moubieapi.api.commands.SenderType;
 import com.moubieapi.moubieapi.commands.CommandMainNodeAbstract;
@@ -24,6 +26,8 @@ public final class CommandMain
 
         /* Register Command Nodes */
         this.nextNodes.add("create", new CommandCreate(1, "create"));
+        this.nextNodes.add("editor", new CommandEditor(1, "editor"));
+        this.nextNodes.add("attributes", new CommandAttributes(1, "attributes"));
     }
 
     /**

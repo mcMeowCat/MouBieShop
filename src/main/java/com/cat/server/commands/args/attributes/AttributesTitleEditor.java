@@ -1,20 +1,22 @@
-package com.cat.server.commands.args;
+package com.cat.server.commands.args.attributes;
 
 import com.cat.server.MouBieCat;
 import com.cat.server.shop.Shop;
 import com.moubieapi.api.commands.SenderType;
 import com.moubieapi.moubieapi.commands.CommandNodeAbstract;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 創建商店指令
+ * 用於編輯商店標題屬性指令
  * @author MouBieCat
  */
-public final class CommandCreate
+public final class AttributesTitleEditor
         extends CommandNodeAbstract {
 
     /**
@@ -22,8 +24,8 @@ public final class CommandCreate
      * @param nodeId      當前節點列數
      * @param nodeName    節點名稱
      */
-    public CommandCreate(final int nodeId, final @NotNull String nodeName) {
-        super(nodeId, nodeName, "MouBieShop.create", SenderType.PLAYER_SENDER, "用於創建商店指令參數。", 2);
+    public AttributesTitleEditor(final int nodeId, final @NotNull String nodeName) {
+        super(nodeId, nodeName, SenderType.PLAYER_SENDER, "用於編輯商店標題屬性。", 3);
     }
 
     /**
@@ -33,14 +35,12 @@ public final class CommandCreate
      * @return 是否成功運行
      */
     public boolean onCommand(final @NotNull CommandSender sender, final @NotNull String[] args) {
-        final Shop shop = MouBieCat.getInstance().getShopManager().get(args[1]);
-        if (shop != null)
-            sender.sendMessage(MouBieCat.PLUGIN_TITLE + "§c很抱歉，該商店名稱已經存在。");
+        final Player player = (Player) sender;
 
-        else {
-            MouBieCat.getInstance().getShopManager().add(args[1], new Shop(args[1]));
-            sender.sendMessage(MouBieCat.PLUGIN_TITLE + "§f完成，商店成功被創建。");
-            return true;
+        final @Nullable Shop shop = PlayerEditorCache.get(player).shop;
+        if (shop != null) {
+            shop.setShopTitle(args[2]);
+            sender.sendMessage(MouBieCat.PLUGIN_TITLE + "§f您成功編輯了 §6" + shop.getName() + " §f商店的§6標題屬性§f。");
         }
 
         return false;

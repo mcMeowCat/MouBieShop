@@ -13,20 +13,18 @@ import java.util.Map;
 
 /**
  * 代表商店檔案細節部分讀取
+ *
  * @author MouBieCat
  */
-public final class ShopSectionReader {
+public record ShopSectionReader(@NotNull Loader loader) {
 
     private static final String SHOP_TITLE_PATH = "Shop.title";
 
     private static final String SHOP_GIVE_ITEM_PATH = "Shop.give_item";
 
-    // 檔案加載器
-    @NotNull
-    private final Loader loader;
-
     /**
      * 建構子
+     *
      * @param loader 檔案加載器
      */
     public ShopSectionReader(final @NotNull Loader loader) {
@@ -79,6 +77,7 @@ public final class ShopSectionReader {
 
         /**
          * 建構子
+         *
          * @param loader 檔案加載器
          */
         public ShopBuySectionReader(final @NotNull Loader loader) {
@@ -90,7 +89,7 @@ public final class ShopSectionReader {
      * 代表商店購買所需的條件部分讀取(Minecraft)
      * @author MouBieCat
      */
-    public static class ShopMinecraftBuySectionReader
+    public final static class ShopMinecraftBuySectionReader
             extends ShopBuySectionReader {
 
         private static final String SHOP_BUY_MINECRAFT_EXP_PATH = "Shop.buy.MINECRAFT.exp";
@@ -99,6 +98,7 @@ public final class ShopSectionReader {
 
         /**
          * 建構子
+         *
          * @param loader 檔案加載器
          */
         public ShopMinecraftBuySectionReader(final @NotNull Loader loader) {
@@ -137,13 +137,14 @@ public final class ShopSectionReader {
      * 代表商店購買所需的條件部分讀取(Plugin)
      * @author MouBieCat
      */
-    public static class ShopPluginBuySectionReader
+    public final static class ShopPluginBuySectionReader
             extends ShopBuySectionReader {
 
         private static final String SHOP_BUY_PLUGIN_PLAYER_POINT_PATH = "Shop.buy.PLUGIN.PlayerPoint";
 
         /**
          * 建構子
+         *
          * @param loader 檔案加載器
          */
         public ShopPluginBuySectionReader(final @NotNull Loader loader) {
@@ -154,12 +155,8 @@ public final class ShopSectionReader {
          * 獲取購買所需的 PlayerPoint 插件點數
          * @return 插件點數
          */
-        public int getShopPlayerPoint() {
-            if (this.loader.getConfiguration().contains(SHOP_BUY_PLUGIN_PLAYER_POINT_PATH) && this.isHookPlugin("PlayerPoint"))
-                return this.loader.getInt(SHOP_BUY_PLUGIN_PLAYER_POINT_PATH);
-
-            MouBieCat.getInstance().getDebugger().warning("§c您的商店配置包含了 §6" + SHOP_BUY_PLUGIN_PLAYER_POINT_PATH + " §c部分，但是您的伺服器沒有裝載 §6PlayerPoints §c插件。");
-            return 0;
+        public int getShopPlayerPoints() {
+            return this.loader.getInt(SHOP_BUY_PLUGIN_PLAYER_POINT_PATH);
         }
 
         /**

@@ -18,3 +18,9 @@ commands:
 permissions:
   MouBieShop.create:
     description: "是否可以創建商店。"
+
+  MouBieShop.editor:
+    description: "是否可以選定編輯的商店。"
+
+  MouBieShop.attributes:
+    description: "是否可以編輯商店屬性。"

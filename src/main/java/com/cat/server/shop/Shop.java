@@ -1,6 +1,8 @@
 package com.cat.server.shop;
 
 import com.cat.server.loader.ShopOperate;
+import com.moubieapi.api.Utils;
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,12 +17,60 @@ public final class Shop {
     // 商店操作
     private final ShopOperate operate;
 
+    // 商店名稱
+    @NotNull
+    private final String name;
+
+    // 商店標題
+    @NotNull
+    private String title;
+
+    // 商品項目
+    @NotNull
+    private ItemStack giveItem;
+
+    // 購買商品所需的條件(Minecraft)
+    @NotNull
+    private final MinecraftDemandContent minecraftDemandContent = new MinecraftDemandContent();
+
+    // 購買商品所需的條件(Plugin)
+    @NotNull
+    private final PluginDemandContent pluginDemandContent = new PluginDemandContent();
+
     /**
      * 商店名稱 (檔案名稱)
      * @param shopName 商店名稱
      */
     public Shop(final @NotNull String shopName) {
         this.operate = new ShopOperate(shopName + ".yml");
+
+        // 商店基本訊息加載
+        this.name = shopName;
+        this.title = this.operate.READER.getShopTitle();
+        this.giveItem = this.operate.READER.getShopGiveItem();
+
+        // 購買條件 (Minecraft)
+        this.minecraftDemandContent.setExp(
+                this.operate.READER.toMinecraftBuySectionReader().getShopBuyExp()
+        );
+
+        this.minecraftDemandContent.setItems(
+                this.operate.READER.toMinecraftBuySectionReader().getShopBuyItems()
+        );
+
+        // 購買條件 (Plugin)
+        this.pluginDemandContent.setPlayerPoints(
+                this.operate.READER.toPluginBuySectionReader().getShopPlayerPoints()
+        );
+    }
+
+    /**
+     * 獲取商店名稱
+     * @return 名稱
+     */
+    @NotNull
+    public String getName() {
+        return this.name;
     }
 
     /**
@@ -29,7 +79,7 @@ public final class Shop {
      */
     @NotNull
     public String getShopTitle() {
-        return this.operate.READER.getShopTitle();
+        return this.title;
     }
 
     /**
@@ -38,6 +88,7 @@ public final class Shop {
      */
     public void setShopTitle(final @NotNull String title) {
         this.operate.WRITER.setShopTitle(title);
+        this.title = ChatColor.translateAlternateColorCodes('&', Utils.forMessageToRGB(title));
     }
 
     /**
@@ -46,7 +97,7 @@ public final class Shop {
      */
     @NotNull
     public ItemStack getShopGiveItem() {
-        return this.operate.READER.getShopGiveItem();
+        return this.giveItem;
     }
 
     /**
@@ -55,6 +106,7 @@ public final class Shop {
      */
     public void setShopGiveItem(final @NotNull ItemStack item) {
         this.operate.WRITER.setShopGiveItem(item);
+        this.giveItem = item;
     }
 
     /**
@@ -62,7 +114,7 @@ public final class Shop {
      * @return 經驗值
      */
     public int getShopBuyExp() {
-        return this.operate.READER.toMinecraftBuySectionReader().getShopBuyExp();
+        return this.minecraftDemandContent.getExp();
     }
 
     /**
@@ -71,6 +123,7 @@ public final class Shop {
      */
     public void setShopBuyExp(final int exp) {
         this.operate.WRITER.toMinecraftBuySectionWriter().setShopBuyExp(exp);
+        this.minecraftDemandContent.setExp(exp);
     }
 
     /**
@@ -79,7 +132,7 @@ public final class Shop {
      */
     @NotNull
     public Map<String, ItemStack> getShopBuyItems() {
-        return this.operate.READER.toMinecraftBuySectionReader().getShopBuyItems();
+        return this.minecraftDemandContent.getItems();
     }
 
     /**
@@ -87,8 +140,13 @@ public final class Shop {
      * @param key 物品路徑示標符
      * @param item 物品
      */
-    public void addShopBuyItems(final @NotNull String key, final @NotNull ItemStack item) {
-        this.operate.WRITER.toMinecraftBuySectionWriter().addShopBuyItems(key, item);
+    public boolean addShopBuyItems(final @NotNull String key, final @NotNull ItemStack item) {
+        if (this.operate.WRITER.toMinecraftBuySectionWriter().addShopBuyItems(key, item)) {
+            this.minecraftDemandContent.getItems().put(key, item);
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -97,6 +155,7 @@ public final class Shop {
      */
     public void removeShopBuyItems(final @NotNull String key) {
         this.operate.WRITER.toMinecraftBuySectionWriter().removeShopBuyItems(key);
+        this.minecraftDemandContent.getItems().remove(key);
     }
 
     /**
@@ -104,7 +163,7 @@ public final class Shop {
      * @return 插件點數
      */
     public int getShopPlayerPoint() {
-        return this.operate.READER.toPluginBuySectionReader().getShopPlayerPoint();
+        return this.pluginDemandContent.getPlayerPoints();
     }
 
     /**
@@ -112,7 +171,8 @@ public final class Shop {
      * @param point 插件點數
      */
     public void setShopPlayerPoint(final int point) {
-        this.operate.WRITER.toPluginBuySectionWriter().setShopPlayerPoint(point);
+        this.operate.WRITER.toPluginBuySectionWriter().setShopPlayerPoints(point);
+        this.pluginDemandContent.setPlayerPoints(point);
     }
 
 }

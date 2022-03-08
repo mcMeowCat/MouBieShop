@@ -1,0 +1,20 @@
+name: MouBieShop
+
+version: '${project.version}'
+api-version: ${plugin.api.version}
+
+authors: [ MouBieCat ]
+
+depend: [ MouBieAPI ]
+softdepend: [ PlayerPoints ]
+
+main: com.cat.server.MouBieCat
+
+commands:
+  MouBieShop:
+    description: "為該插件的主要指令。"
+    aliases: [ mbs ]
+
+permissions:
+  MouBieShop.create:
+    description: "是否可以創建商店。"

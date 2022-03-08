@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.cat.server</groupId>
+    <artifactId>MouBieShop</artifactId>
+    <version>1.0.0</version>
+
+    <name>MouBieAPI</name>
+    <description>作為 MouBieCat 開發的功能，可以創建自己的交易商店介面。</description>
+
+    <properties>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jdk.version>17</jdk.version>
+        <java.version>17</java.version>
+
+        <!-- api-version: -->
+        <plugin.api.version>1.18</plugin.api.version>
+
+        <!-- maven library version -->
+        <spigot.api.version>1.18-R0.1-SNAPSHOT</spigot.api.version>
+    </properties>
+
+    <!-- 從雲端倉庫下載依賴到本地倉庫 -->
+    <repositories>
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
+
+    <!-- 導入依賴 -->
+    <dependencies>
+        <!-- jetbrains -->
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>23.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Spigot API -->
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>${spigot.api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- MouBieAPI -->
+        <dependency>
+            <groupId>com.cat.moubieapi</groupId>
+            <artifactId>MouBieCat</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
+
+    <!-- 建構 -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+
+</project>

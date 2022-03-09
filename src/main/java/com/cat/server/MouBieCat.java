@@ -1,11 +1,9 @@
 package com.cat.server;
 
-import com.cat.server.commands.CommandMain;
-import com.cat.server.loader.ShopLoader;
-import com.cat.server.manager.ShopManager;
+import com.cat.server.loader.ShopStoreLoader;
+import com.cat.server.manager.ShopStoreManager;
 import com.moubieapi.api.plugin.PluginRegister;
 import com.moubieapi.moubieapi.plugin.MouBiePluginBase;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,21 +19,19 @@ public final class MouBieCat
 
     // 商店管理器
     @NotNull
-    private final ShopManager shopManager = new ShopManager();
-
+    private final ShopStoreManager manager = new ShopStoreManager();
 
     @PluginRegister(name = "加載所有商店", type = PluginRegister.ActionType.ACTION_ENABLE, priority = PluginRegister.ActionPriority.HIGHEST)
     public void loadShops() {
-        final int count = new ShopLoader("Shops/").loadShops(this.shopManager);
-        this.getDebugger().info("§a成功加載了 §6" + count + " §a個商店。");
+        final int count = new ShopStoreLoader("shops").loadStores(this.manager);
+        this.getDebugger().info("§a成功加載了 §6" + count + " §a個店鋪。");
     }
 
 
-    @PluginRegister(name = "註冊插件指令", type = PluginRegister.ActionType.ACTION_ENABLE)
-    public void loadCommands() {
-        final PluginCommand mouBieShop = this.getCommand("MouBieShop");
-        if (mouBieShop != null)
-            mouBieShop.setExecutor(new CommandMain(mouBieShop));
+    @PluginRegister(name = "重讀所有商店", type = PluginRegister.ActionType.ACTION_RELOAD)
+    public void reloadShops() {
+        final int count = new ShopStoreLoader("Shops/").loadStores(this.manager);
+        this.getDebugger().info("§e成功重載了 §6" + count + " §e個商店。");
     }
 
 
@@ -49,12 +45,12 @@ public final class MouBieCat
     }
 
     /**
-     * 獲取商店管理器
+     * 獲取商店店鋪管理器
      * @return 管理器
      */
     @NotNull
-    public ShopManager getShopManager() {
-        return this.shopManager;
+    public ShopStoreManager getShopManager() {
+        return this.manager;
     }
 
 }

@@ -1,49 +1,47 @@
 package com.cat.server.loader;
 
-import com.moubieapi.MouBieCat;
-import com.moubieapi.api.Utils;
 import com.moubieapi.moubieapi.yaml.Loader;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * 代表商店檔案細節部分寫入
- *
  * @author MouBieCat
  */
-public record ShopSectionWriter(@NotNull Loader loader) {
-
-    private static final String SHOP_TITLE_PATH = "Shop.title";
-
-    private static final String SHOP_GIVE_ITEM_PATH = "Shop.give_item";
+public final class ShopSectionWriter
+        extends ShopSection {
 
     /**
      * 建構子
-     *
      * @param loader 檔案加載器
      */
     public ShopSectionWriter(final @NotNull Loader loader) {
-        this.loader = loader;
+        super(loader);
     }
 
     /**
      * 設置商店標題
+     * @param name 商店名稱
      * @param title 標題
      */
-    public void setShopTitle(final @NotNull String title) {
-        this.loader.set(SHOP_TITLE_PATH, title);
+    public void setShopTitle(final @NotNull String name, final @NotNull String title) {
+        this.loader.set(ShopSection.replaceFormat(
+                SHOP_TITLE_PATH, name), title
+        );
+
         this.loader.save();
     }
 
     /**
      * 設置商店購買後給予的物品項目
+     * @param name 商店名稱
      * @param item 物品項目
      */
-    public void setShopGiveItem(final @NotNull ItemStack item) {
-        this.loader.set(SHOP_GIVE_ITEM_PATH, item);
+    public void setShopGiveItem(final @NotNull String name, final @NotNull ItemStack item) {
+        this.loader.set(
+                ShopSection.replaceFormat(SHOP_GIVE_ITEM_PATH, name), item
+        );
+
         this.loader.save();
     }
 
@@ -53,7 +51,7 @@ public record ShopSectionWriter(@NotNull Loader loader) {
      */
     @NotNull
     public ShopMinecraftBuySectionWriter toMinecraftBuySectionWriter() {
-        return new ShopMinecraftBuySectionWriter(this.loader);
+        return new ShopMinecraftBuySectionWriter(this);
     }
 
     /**
@@ -62,25 +60,7 @@ public record ShopSectionWriter(@NotNull Loader loader) {
      */
     @NotNull
     public ShopPluginBuySectionWriter toPluginBuySectionWriter() {
-        return new ShopPluginBuySectionWriter(this.loader);
-    }
-
-    /**
-     * 代表商店購買所需的物品部分讀取
-     * @author MouBieCat
-     */
-    private static class ShopBuySectionWriter {
-        // 檔案加載器
-        protected final Loader loader;
-
-        /**
-         * 建構子
-         *
-         * @param loader 檔案加載器
-         */
-        public ShopBuySectionWriter(final @NotNull Loader loader) {
-            this.loader = loader;
-        }
+        return new ShopPluginBuySectionWriter(this);
     }
 
     /**
@@ -88,32 +68,44 @@ public record ShopSectionWriter(@NotNull Loader loader) {
      * @author MouBieCat
      */
     public final static class ShopMinecraftBuySectionWriter
-            extends ShopBuySectionWriter {
+            extends ShopSection.ShopMinecraftBuySection {
 
-        private static final String SHOP_BUY_MINECRAFT_EXP_PATH = "Shop.buy.MINECRAFT.exp";
-
-        private static final String SHOP_BUY_MINECRAFT_ITEMS_PATH = "Shop.buy.MINECRAFT.items";
+        /**
+         * 建構子
+         * @param shopSection 商店部分操作類
+         */
+        public ShopMinecraftBuySectionWriter(final @NotNull ShopSection shopSection) {
+            super(shopSection);
+        }
 
         /**
          * 寫入購買所需的經驗值
+         * @param name 商店名稱
          * @param exp 經驗值
          */
-        public void setShopBuyExp(final int exp) {
-            this.loader.set(SHOP_BUY_MINECRAFT_EXP_PATH, exp);
-            this.loader.save();
+        public void setShopBuyExp(final @NotNull String name, final int exp) {
+            final Loader loader = this.shopSection.getLoader();
+
+            loader.set(
+                    ShopSection.replaceFormat(SHOP_BUY_MINECRAFT_EXP_PATH, name), exp
+            );
+            loader.save();
         }
 
         /**
          * 添加一個購買所需的物品
+         * @param name 商店名稱
          * @param key  物品路徑示標符
          * @param item 物品
          */
-        public boolean addShopBuyItems(final @NotNull String key, final @NotNull ItemStack item) {
-            final String keyPath = SHOP_BUY_MINECRAFT_ITEMS_PATH + "." + key;
+        public boolean addShopBuyItems(final @NotNull String name, final @NotNull String key, final @NotNull ItemStack item) {
+            final Loader loader = this.shopSection.getLoader();
 
-            if (!this.loader.getConfiguration().contains(SHOP_BUY_MINECRAFT_ITEMS_PATH + key)) {
-                this.loader.set(keyPath, item);
-                this.loader.save();
+            final String keyPath = ShopSection.replaceFormat(ShopMinecraftBuySection.SHOP_BUY_MINECRAFT_ITEMS_PATH, name) + key;
+
+            if (!loader.getConfiguration().contains(keyPath)) {
+                loader.set(keyPath, item);
+                loader.save();
                 return true;
             }
 
@@ -122,25 +114,21 @@ public record ShopSectionWriter(@NotNull Loader loader) {
 
         /**
          * 刪除一個購買所需的物品
+         * @param name 商店名稱
          * @param key 物品路徑示標符
          */
         @SuppressWarnings("all")
-        public void removeShopBuyItems(final @NotNull String key) {
-            final String keyPath = SHOP_BUY_MINECRAFT_ITEMS_PATH + "." + key;
+        public void removeShopBuyItems(final @NotNull String name, final @NotNull String key) {
+            final Loader loader = this.shopSection.getLoader();
 
-            if (this.loader.getConfiguration().contains(keyPath))
-                this.loader.set(keyPath, null);
+            final String keyPath = ShopSection.replaceFormat(ShopMinecraftBuySection.SHOP_BUY_MINECRAFT_ITEMS_PATH, name) + key;
 
-            this.loader.save();
+            if (loader.getConfiguration().contains(keyPath)) {
+                loader.set(keyPath, null);
+                loader.save();
+            }
         }
 
-        /**
-         * 建構子
-         * @param loader 檔案加載器
-         */
-        public ShopMinecraftBuySectionWriter(final @NotNull Loader loader) {
-            super(loader);
-        }
     }
 
     /**
@@ -148,36 +136,28 @@ public record ShopSectionWriter(@NotNull Loader loader) {
      * @author MouBieCat
      */
     public final static class ShopPluginBuySectionWriter
-            extends ShopBuySectionWriter {
-
-        private static final String SHOP_BUY_PLUGIN_PLAYER_POINT_PATH = "Shop.buy.PLUGIN.PlayerPoints";
+            extends ShopSection.ShopPluginBuySection {
 
         /**
          * 建構子
-         * @param loader 檔案加載器
+         * @param shopSection 商店部分操作類
          */
-        public ShopPluginBuySectionWriter(final @NotNull Loader loader) {
-            super(loader);
+        public ShopPluginBuySectionWriter(final @NotNull ShopSection shopSection) {
+            super(shopSection);
         }
 
         /**
          * 寫入購買所需的 PlayerPoint 插件點數
+         * @param name 商店名稱
          * @param point 插件點數
          */
-        public void setShopPlayerPoints(final int point) {
-            this.loader.set(SHOP_BUY_PLUGIN_PLAYER_POINT_PATH, point);
-            this.loader.save();
+        public void setShopPlayerPoints(final @NotNull String name, final int point) {
+            final Loader loader = this.shopSection.getLoader();
+
+            loader.set(ShopSection.replaceFormat(ShopPluginBuySection.SHOP_BUY_PLUGIN_PLAYER_POINT_PATH, name), point);
+            loader.save();
         }
 
-        /**
-         * 該插件依賴是否存在
-         * @param name 插件名稱
-         * @return 是否可依賴
-         */
-        private boolean isHookPlugin(final @NotNull String name) {
-            final Plugin plugin = Bukkit.getPluginManager().getPlugin(name);
-            return plugin != null && plugin.isEnabled();
-        }
     }
 
 }

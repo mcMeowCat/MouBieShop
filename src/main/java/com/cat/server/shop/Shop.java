@@ -14,8 +14,9 @@ import java.util.Map;
  */
 public final class Shop {
 
-    // 商店操作
-    private final ShopOperate operate;
+    // 總店鋪名稱
+    @NotNull
+    private final String store;
 
     // 商店名稱
     @NotNull
@@ -41,27 +42,38 @@ public final class Shop {
      * 商店名稱 (檔案名稱)
      * @param shopName 商店名稱
      */
-    public Shop(final @NotNull String shopName) {
-        this.operate = new ShopOperate(shopName + ".yml");
+    public Shop(final @NotNull String storeName, final @NotNull String shopName) {
+        // 商店操作加載
+        final ShopOperate shopOperate = this.getShopOperate();
 
         // 商店基本訊息加載
+        this.store = storeName;
         this.name = shopName;
-        this.title = this.operate.READER.getShopTitle();
-        this.giveItem = this.operate.READER.getShopGiveItem();
+        this.title = shopOperate.reader.getShopTitle(shopName);
+        this.giveItem = shopOperate.reader.getShopGiveItem(shopName);
 
         // 購買條件 (Minecraft)
         this.minecraftDemandContent.setExp(
-                this.operate.READER.toMinecraftBuySectionReader().getShopBuyExp()
+                shopOperate.reader.toMinecraftBuySectionReader().getShopBuyExp(shopName)
         );
 
         this.minecraftDemandContent.setItems(
-                this.operate.READER.toMinecraftBuySectionReader().getShopBuyItems()
+                shopOperate.reader.toMinecraftBuySectionReader().getShopBuyItems(shopName)
         );
 
         // 購買條件 (Plugin)
         this.pluginDemandContent.setPlayerPoints(
-                this.operate.READER.toPluginBuySectionReader().getShopPlayerPoints()
+                shopOperate.reader.toPluginBuySectionReader().getShopPlayerPoints(shopName)
         );
+    }
+
+    /**
+     * 獲取總店鋪名稱
+     * @return 店鋪名稱
+     */
+    @NotNull
+    public String getStore() {
+        return this.store;
     }
 
     /**
@@ -87,7 +99,8 @@ public final class Shop {
      * @param title 標題
      */
     public void setShopTitle(final @NotNull String title) {
-        this.operate.WRITER.setShopTitle(title);
+        final ShopOperate shopOperate = this.getShopOperate();
+        shopOperate.writer.setShopTitle(this.name, title);
         this.title = ChatColor.translateAlternateColorCodes('&', Utils.forMessageToRGB(title));
     }
 
@@ -105,7 +118,8 @@ public final class Shop {
      * @param item 物品項目
      */
     public void setShopGiveItem(final @NotNull ItemStack item) {
-        this.operate.WRITER.setShopGiveItem(item);
+        final ShopOperate shopOperate = this.getShopOperate();
+        shopOperate.writer.setShopGiveItem(this.name, item);
         this.giveItem = item;
     }
 
@@ -122,7 +136,8 @@ public final class Shop {
      * @param exp 經驗值
      */
     public void setShopBuyExp(final int exp) {
-        this.operate.WRITER.toMinecraftBuySectionWriter().setShopBuyExp(exp);
+        final ShopOperate shopOperate = this.getShopOperate();
+        shopOperate.writer.toMinecraftBuySectionWriter().setShopBuyExp(this.name, exp);
         this.minecraftDemandContent.setExp(exp);
     }
 
@@ -141,7 +156,9 @@ public final class Shop {
      * @param item 物品
      */
     public boolean addShopBuyItems(final @NotNull String key, final @NotNull ItemStack item) {
-        if (this.operate.WRITER.toMinecraftBuySectionWriter().addShopBuyItems(key, item)) {
+        final ShopOperate shopOperate = this.getShopOperate();
+
+        if (shopOperate.writer.toMinecraftBuySectionWriter().addShopBuyItems(this.name, key, item)) {
             this.minecraftDemandContent.getItems().put(key, item);
             return true;
         }
@@ -154,7 +171,8 @@ public final class Shop {
      * @param key 物品路徑示標符
      */
     public void removeShopBuyItems(final @NotNull String key) {
-        this.operate.WRITER.toMinecraftBuySectionWriter().removeShopBuyItems(key);
+        final ShopOperate shopOperate = this.getShopOperate();
+        shopOperate.writer.toMinecraftBuySectionWriter().removeShopBuyItems(this.name, key);
         this.minecraftDemandContent.getItems().remove(key);
     }
 
@@ -171,8 +189,18 @@ public final class Shop {
      * @param point 插件點數
      */
     public void setShopPlayerPoint(final int point) {
-        this.operate.WRITER.toPluginBuySectionWriter().setShopPlayerPoints(point);
+        final ShopOperate shopOperate = this.getShopOperate();
+        shopOperate.writer.toPluginBuySectionWriter().setShopPlayerPoints(this.name, point);
         this.pluginDemandContent.setPlayerPoints(point);
+    }
+
+    /**
+     * 獲取商店店鋪操作
+     * @return 商店店鋪操作
+     */
+    @NotNull
+    private ShopOperate getShopOperate() {
+        return new ShopOperate(this.store);
     }
 
 }

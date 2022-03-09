@@ -13,20 +13,22 @@ import java.io.File;
 public final class ShopOperate
         extends Loader {
 
+    private static final String FILE_PATH = "shops" + File.separator;
+
     // 商店部分讀取物件
     @NotNull
-    public final ShopSectionReader READER = new ShopSectionReader(this);
+    public final ShopSectionReader reader = new ShopSectionReader(this);
 
     // 商店部分寫入物件
     @NotNull
-    public final ShopSectionWriter WRITER = new ShopSectionWriter(this);
+    public final ShopSectionWriter writer = new ShopSectionWriter(this);
 
     /**
      * 建構子
-     * @param name 商店檔案名稱
+     * @param store 店鋪檔案名稱
      */
-    public ShopOperate(final @NotNull String name) {
-        super(MouBieCat.getInstance(), "shops" + File.separator, name, true);
+    public ShopOperate(final @NotNull String store) {
+        super(MouBieCat.getInstance(), FILE_PATH, store, true);
     }
 
 }

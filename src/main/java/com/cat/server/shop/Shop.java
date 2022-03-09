@@ -1,7 +1,5 @@
 package com.cat.server.shop;
 
-import com.moubieapi.api.Utils;
-import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,10 +18,6 @@ public final class Shop {
     // 商店名稱
     @NotNull
     private final String name;
-
-    // 商店標題
-    @NotNull
-    private String title;
 
     // 商品項目
     @NotNull
@@ -47,7 +41,6 @@ public final class Shop {
 
         // 商店基本訊息加載
         this.name = shopName;
-        this.title = operate.reader.getShopTitle(shopName);
         this.giveItem = operate.reader.getShopGiveItem(shopName);
 
         // 購買條件 (Minecraft)
@@ -72,24 +65,6 @@ public final class Shop {
     @NotNull
     public String getName() {
         return this.name;
-    }
-
-    /**
-     * 獲取商店標題
-     * @return 標題
-     */
-    @NotNull
-    public String getShopTitle() {
-        return this.title;
-    }
-
-    /**
-     * 設置商店標題
-     * @param title 標題
-     */
-    public void setShopTitle(final @NotNull String title) {
-        this.operate.writer.setShopTitle(this.name, title);
-        this.title = ChatColor.translateAlternateColorCodes('&', Utils.forMessageToRGB(title));
     }
 
     /**

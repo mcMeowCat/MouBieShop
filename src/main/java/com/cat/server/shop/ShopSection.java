@@ -11,9 +11,9 @@ import org.jetbrains.annotations.NotNull;
  */
 abstract class ShopSection {
 
-    protected static final String SHOP_TITLE_PATH = "Shop.{name}.title";
+    protected static final String STORE_TITLE_PATH = "info.title";
 
-    protected static final String SHOP_GIVE_ITEM_PATH = "Shop.{name}.give_item";
+    protected static final String SHOP_GIVE_ITEM_PATH = "Shops.{name}.give_item";
 
     // 檔案加載器
     @NotNull
@@ -83,9 +83,9 @@ abstract class ShopSection {
     protected static abstract class ShopMinecraftBuySection
             extends ShopBuySectionBase {
 
-        protected static final String SHOP_BUY_MINECRAFT_EXP_PATH = "Shop.{name}.buy.MINECRAFT.exp";
+        protected static final String SHOP_BUY_MINECRAFT_EXP_PATH = "Shops.{name}.buy.MINECRAFT.exp";
 
-        protected static final String SHOP_BUY_MINECRAFT_ITEMS_PATH = "Shop.{name}.buy.MINECRAFT.items";
+        protected static final String SHOP_BUY_MINECRAFT_ITEMS_PATH = "Shops.{name}.buy.MINECRAFT.items";
 
 
         /**
@@ -105,9 +105,9 @@ abstract class ShopSection {
     protected static abstract class ShopPluginBuySection
             extends ShopBuySectionBase {
 
-        protected static final String SHOP_BUY_PLUGIN_PLAYER_POINT_PATH = "Shop.{name}.buy.PLUGIN.PlayerPoint";
+        protected static final String SHOP_BUY_PLUGIN_PLAYER_POINT_PATH = "Shops.{name}.buy.PLUGIN.PlayerPoint";
 
-        protected static final String SHOP_BUY_PLUGIN_VAULT_PATH = "Shop.{name}.buy.PLUGIN.Vault";
+        protected static final String SHOP_BUY_PLUGIN_VAULT_PATH = "Shops.{name}.buy.PLUGIN.Vault";
 
         /**
          * 建構子

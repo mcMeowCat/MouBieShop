@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * 代表商店檔案細節部分寫入
  * @author MouBieCat
  */
-final class ShopSectionWriter
+public final class ShopSectionWriter
         extends ShopSection {
 
     /**
@@ -20,16 +20,11 @@ final class ShopSectionWriter
     }
 
     /**
-     * 設置商店標題
-     * @param name 商店名稱
+     * 設定店鋪標題
      * @param title 標題
      */
-    public void setShopTitle(final @NotNull String name, final @NotNull String title) {
-        this.loader.set(ShopSection.replaceFormat(
-                SHOP_TITLE_PATH, name), title
-        );
-
-        this.loader.save();
+    public void setStoreTitle(final @NotNull String title) {
+        this.loader.set(ShopSection.STORE_TITLE_PATH, title);
     }
 
     /**

@@ -1,11 +1,14 @@
 package com.cat.server;
 
+import com.cat.server.command.CommandMain;
 import com.cat.server.loader.ShopStoreLoader;
 import com.cat.server.manager.ShopStoreManager;
 import com.moubieapi.api.plugin.PluginRegister;
 import com.moubieapi.moubieapi.plugin.MouBiePluginBase;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 代表該插件的主要類
@@ -13,6 +16,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class MouBieCat
         extends MouBiePluginBase {
+
+    public static final String PLUGIN_TITLE = "§7[§fMouBie§6Shop§7] ";
 
     // 商店管理器
     @NotNull
@@ -25,9 +30,18 @@ public final class MouBieCat
     }
 
 
+    @PluginRegister(name = "註冊插件指令", type = PluginRegister.ActionType.ACTION_ENABLE)
+    public void loadCommands() {
+        final @Nullable PluginCommand mouBieShop = this.getCommand("MouBieShop");
+        if (mouBieShop != null)
+            mouBieShop.setExecutor(new CommandMain());
+    }
+
+
     @PluginRegister(name = "重讀所有商店", type = PluginRegister.ActionType.ACTION_RELOAD)
     public void reloadShops() {
-        final int count = new ShopStoreLoader("Shops/").loadStores(this.manager);
+        this.manager.clear();
+        final int count = new ShopStoreLoader("shops").loadStores(this.manager);
         this.getDebugger().info("§e成功重載了 §6" + count + " §e個商店。");
     }
 

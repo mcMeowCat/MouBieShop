@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -37,7 +36,10 @@ public final class ShopStoreLoader {
 
         int count = 0;
         for (final File file : storeFiles) {
-            final String storeName = file.getName();
+            // -= !!! =-
+            // Test.yml -> Test
+            // 如果不將副檔名替換為空，插件重讀時商店會被複製。
+            final String storeName = file.getName().replace(".yml", "");
 
             final ShopManager shopManager = new ShopManager(storeName);
             final int shopCount = new ShopLoader().loadShops(shopManager);
@@ -68,7 +70,32 @@ public final class ShopStoreLoader {
         if (files == null)
             return new ArrayList<>();
 
-        return Arrays.stream(files).toList();
+        // 判斷是否為 yaml 檔案
+        final List<File> yamlFiles = new ArrayList<>();
+        for (final File file : files)
+            if (this.isYamlFile(file))
+                yamlFiles.add(file);
+
+        return yamlFiles;
+    }
+
+    /**
+     * 判斷是否為 Yaml 檔案
+     * @param file 檔案
+     * @return 是否是Yaml檔案
+     */
+    private boolean isYamlFile(final @NotNull File file) {
+        final String fileName = file.getName();
+
+        try {
+            return file.exists() &&
+                    file.isFile() &&
+                    fileName.substring(
+                            fileName.lastIndexOf(".")).equalsIgnoreCase(".yml");
+
+        } catch (final Exception ignored) { }
+
+        return false;
     }
 
 }

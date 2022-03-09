@@ -4,6 +4,7 @@ import com.moubieapi.moubieapi.yaml.Loader;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +13,7 @@ import java.util.Map;
  * 代表商店檔案細節部分讀取
  * @author MouBieCat
  */
-final class ShopSectionReader
+public final class ShopSectionReader
         extends ShopSection {
 
     /**
@@ -24,15 +25,12 @@ final class ShopSectionReader
     }
 
     /**
-     * 獲取商店標題
-     * @param name 商店名稱
+     * 獲取店鋪標題
      * @return 標題
      */
-    @NotNull
-    public String getShopTitle(final @NotNull String name) {
-        return this.loader.getString(
-                ShopSection.replaceFormat(ShopSection.SHOP_TITLE_PATH, name)
-        );
+    @Nullable
+    public String getStoreTitle() {
+        return this.loader.getConfiguration().getString(ShopSection.STORE_TITLE_PATH);
     }
 
     /**

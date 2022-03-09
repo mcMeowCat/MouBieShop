@@ -107,6 +107,8 @@ abstract class ShopSection {
 
         protected static final String SHOP_BUY_PLUGIN_PLAYER_POINT_PATH = "Shop.{name}.buy.PLUGIN.PlayerPoint";
 
+        protected static final String SHOP_BUY_PLUGIN_VAULT_PATH = "Shop.{name}.buy.PLUGIN.Vault";
+
         /**
          * 建構子
          * @param shopSection 商店部分操作類

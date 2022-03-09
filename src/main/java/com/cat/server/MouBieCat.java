@@ -14,9 +14,6 @@ import org.jetbrains.annotations.NotNull;
 public final class MouBieCat
         extends MouBiePluginBase {
 
-    // 插件標題
-    public static final String PLUGIN_TITLE = "§7[§fMouBie§6Shop§7] §r";
-
     // 商店管理器
     @NotNull
     private final ShopStoreManager manager = new ShopStoreManager();

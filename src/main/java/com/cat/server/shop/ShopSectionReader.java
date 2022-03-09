@@ -142,7 +142,18 @@ final class ShopSectionReader
          */
         public int getShopPlayerPoints(final @NotNull String name) {
             return this.shopSection.getLoader().getInt(
-                    ShopSection.replaceFormat(SHOP_BUY_PLUGIN_PLAYER_POINT_PATH, name)
+                    ShopSection.replaceFormat(ShopPluginBuySection.SHOP_BUY_PLUGIN_PLAYER_POINT_PATH, name)
+            );
+        }
+
+        /**
+         * 獲取購買所需的 PlayerPoint 插件點數
+         * @param name 商店名稱
+         * @return 插件點數
+         */
+        public double getShopVault(final @NotNull String name) {
+            return this.shopSection.getLoader().getDouble(
+                    ShopSection.replaceFormat(ShopPluginBuySection.SHOP_BUY_PLUGIN_VAULT_PATH, name)
             );
         }
 

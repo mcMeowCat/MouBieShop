@@ -6,7 +6,7 @@ api-version: ${plugin.api.version}
 authors: [ MouBieCat ]
 
 depend: [ MouBieAPI ]
-softdepend: [ PlayerPoints ]
+softdepend: [ Vault, PlayerPoints ]
 
 main: com.cat.server.MouBieCat
 

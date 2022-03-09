@@ -176,4 +176,21 @@ public final class Shop {
         this.pluginDemandContent.setPlayerPoints(point);
     }
 
+    /**
+     * 獲取購買所需的 Vault 插件金錢
+     * @return 插件點數
+     */
+    public double getShopVault() {
+        return this.pluginDemandContent.getVault();
+    }
+
+    /**
+     * 寫入購買所需的 Vault 插件金錢
+     * @param vault 插件金錢
+     */
+    public void setShopPlayerPoint(final double vault) {
+        this.operate.writer.toPluginBuySectionWriter().setShopVault(this.name, vault);
+        this.pluginDemandContent.setVault(vault);
+    }
+
 }

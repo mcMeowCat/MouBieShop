@@ -158,6 +158,18 @@ final class ShopSectionWriter
             loader.save();
         }
 
+        /**
+         * 寫入購買所需的 Vault 插件金錢
+         * @param name 商店名稱
+         * @param vault 插件金錢
+         */
+        public void setShopVault(final @NotNull String name, final double vault) {
+            final Loader loader = this.shopSection.getLoader();
+
+            loader.set(ShopSection.replaceFormat(ShopPluginBuySection.SHOP_BUY_PLUGIN_VAULT_PATH, name), vault);
+            loader.save();
+        }
+
     }
 
 }

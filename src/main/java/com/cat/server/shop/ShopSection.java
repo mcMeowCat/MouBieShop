@@ -1,4 +1,4 @@
-package com.cat.server.loader;
+package com.cat.server.shop;
 
 import com.moubieapi.moubieapi.yaml.Loader;
 import org.bukkit.Bukkit;

@@ -1,4 +1,4 @@
-package com.cat.server.loader;
+package com.cat.server.shop;
 
 import com.cat.server.MouBieCat;
 import com.moubieapi.moubieapi.yaml.Loader;
@@ -15,6 +15,10 @@ public final class ShopOperate
 
     private static final String FILE_PATH = "shops" + File.separator;
 
+    // 店鋪名稱
+    @NotNull
+    private final String store;
+
     // 商店部分讀取物件
     @NotNull
     public final ShopSectionReader reader = new ShopSectionReader(this);
@@ -29,6 +33,16 @@ public final class ShopOperate
      */
     public ShopOperate(final @NotNull String store) {
         super(MouBieCat.getInstance(), FILE_PATH, store, true);
+        this.store = store;
+    }
+
+    /**
+     * 獲取商店店鋪名稱
+     * @return 店鋪名稱
+     */
+    @NotNull
+    public String getStore() {
+        return this.store;
     }
 
 }

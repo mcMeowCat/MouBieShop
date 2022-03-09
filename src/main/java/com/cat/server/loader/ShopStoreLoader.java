@@ -36,18 +36,17 @@ public final class ShopStoreLoader {
         final List<File> storeFiles = this.getStoreFiles();
 
         int count = 0;
-
         for (final File file : storeFiles) {
-            final String storeName = file.getName().split("\\.")[0];
+            final String storeName = file.getName();
 
-            final ShopManager shopManager = new ShopManager();
-
-            final int shopCount = new ShopLoader(this.filePath, file.getName()).loadShops(storeName, shopManager);
+            final ShopManager shopManager = new ShopManager(storeName);
+            final int shopCount = new ShopLoader().loadShops(shopManager);
 
             // DeBug Message
             MouBieCat.getInstance().getDebugger().info("ShopStoreLoader#loadStores -> §a成功從 §6" + storeName + " §a加載了 §6" + shopCount + " §a個商店。");
 
             manager.add(storeName, shopManager);
+            count++;
         }
 
         return count;
@@ -70,15 +69,6 @@ public final class ShopStoreLoader {
             return new ArrayList<>();
 
         return Arrays.stream(files).toList();
-    }
-
-    /**
-     * 獲取商店檔案路徑
-     * @return 路徑
-     */
-    @NotNull
-    public String getFilePath() {
-        return this.filePath;
     }
 
 }

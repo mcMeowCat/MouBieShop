@@ -1,4 +1,4 @@
-package com.cat.server.loader;
+package com.cat.server.shop;
 
 import com.moubieapi.moubieapi.yaml.Loader;
 import org.bukkit.configuration.ConfigurationSection;
@@ -12,7 +12,7 @@ import java.util.Map;
  * 代表商店檔案細節部分讀取
  * @author MouBieCat
  */
-public final class ShopSectionReader
+final class ShopSectionReader
         extends ShopSection {
 
     /**

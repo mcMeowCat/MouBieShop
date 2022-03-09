@@ -1,4 +1,4 @@
-package com.cat.server.loader;
+package com.cat.server.shop;
 
 import com.moubieapi.moubieapi.yaml.Loader;
 import org.bukkit.inventory.ItemStack;
@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * 代表商店檔案細節部分寫入
  * @author MouBieCat
  */
-public final class ShopSectionWriter
+final class ShopSectionWriter
         extends ShopSection {
 
     /**

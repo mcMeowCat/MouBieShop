@@ -1,6 +1,7 @@
-package com.cat.server.shop;
+package com.cat.server.io;
 
-import com.moubieapi.moubieapi.yaml.Loader;
+import com.cat.server.io.operates.ShopOperate;
+import com.cat.server.shop.Shop;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -18,10 +19,27 @@ public final class ShopSectionReader
 
     /**
      * 建構子
-     * @param loader 檔案加載器
+     * @param storeName 店鋪名稱
      */
-    public ShopSectionReader(final @NotNull Loader loader) {
-        super(loader);
+    public ShopSectionReader(final @NotNull String storeName) {
+        super(storeName);
+    }
+
+    /**
+     * 解析所有商店
+     * @return 商店
+     */
+    @NotNull
+    public Map<String, Shop> parsingShops(final @NotNull ShopOperate operate) {
+        final @Nullable ConfigurationSection section = this.configuration.getConfigurationSection(ShopSection.STORE_SHOPS_PATH);
+        if (section == null)
+            return new HashMap<>();
+
+        final Map<String, Shop> shops = new HashMap<>();
+        for (final String shopName : section.getKeys(false))
+            shops.put(shopName, new Shop(shopName, operate));
+
+        return shops;
     }
 
     /**
@@ -30,19 +48,17 @@ public final class ShopSectionReader
      */
     @Nullable
     public String getStoreTitle() {
-        return this.loader.getConfiguration().getString(ShopSection.STORE_TITLE_PATH);
+        return this.getConfiguration().getString(ShopSection.STORE_TITLE_PATH);
     }
 
     /**
      * 獲取購買後的物品項目
-     * @param name 商店名稱
+     * @param shopName 商店名稱
      * @return 物品項目
      */
     @NotNull
-    public ItemStack getShopGiveItem(final @NotNull String name) {
-        return this.loader.getItemStack(
-                ShopSection.replaceFormat(ShopSection.SHOP_GIVE_ITEM_PATH, name)
-        );
+    public ItemStack getShopGiveItem(final @NotNull String shopName) {
+        return this.getItemStack(ShopSection.replaceFormat(ShopSection.SHOP_GIVE_ITEM_PATH, shopName));
     }
 
     /**
@@ -80,39 +96,31 @@ public final class ShopSectionReader
 
         /**
          * 獲取購買所需的經驗值
-         * @param name 商店名稱
+         * @param shopName 商店名稱
          * @return 經驗值
          */
-        public int getShopBuyExp(final @NotNull String name) {
-            return this.shopSection.getLoader().getInt(
-                    ShopSection.replaceFormat(SHOP_BUY_MINECRAFT_EXP_PATH, name)
-            );
+        public int getShopBuyExp(final @NotNull String shopName) {
+            return this.shopSection.getInt(ShopSection.replaceFormat(ShopMinecraftBuySection.SHOP_BUY_MINECRAFT_EXP_PATH, shopName));
         }
 
         /**
          * 獲取購買所需的物品項目
-         * @param name 商店名稱
+         * @param shopName 商店名稱
          * @return 物品項目
          */
         @NotNull
-        public Map<String, ItemStack> getShopBuyItems(final @NotNull String name) {
-            final Loader loader = this.shopSection.getLoader();
+        public Map<String, ItemStack> getShopBuyItems(final @NotNull String shopName) {
+            final String path = ShopSection.replaceFormat(ShopMinecraftBuySection.SHOP_BUY_MINECRAFT_ITEMS_PATH, shopName);
 
-            final ConfigurationSection configurationSection =
-                    loader.getConfiguration().getConfigurationSection(
-                            ShopSection.replaceFormat(SHOP_BUY_MINECRAFT_ITEMS_PATH, name)
-                    );
-
-            if (configurationSection == null)
+            final @Nullable ConfigurationSection section = this.shopSection.getConfiguration().getConfigurationSection(path);
+            if (section == null)
                 return new HashMap<>();
 
-            final Map<String, ItemStack> itemStacks = new HashMap<>();
-            for (final String key : configurationSection.getKeys(false))
-                itemStacks.put(key, loader.getItemStack(
-                        ShopSection.replaceFormat(SHOP_BUY_MINECRAFT_ITEMS_PATH, name) + "." + key)
-                );
+            final Map<String, ItemStack> items = new HashMap<>();
+            for (final String itemKey : section.getKeys(false))
+                items.put(itemKey, this.shopSection.getItemStack(path + "." + itemKey));
 
-            return itemStacks;
+            return items;
         }
 
     }
@@ -135,24 +143,20 @@ public final class ShopSectionReader
 
         /**
          * 獲取購買所需的 PlayerPoint 插件點數
-         * @param name 商店名稱
+         * @param shopName 商店名稱
          * @return 插件點數
          */
-        public int getShopPlayerPoints(final @NotNull String name) {
-            return this.shopSection.getLoader().getInt(
-                    ShopSection.replaceFormat(ShopPluginBuySection.SHOP_BUY_PLUGIN_PLAYER_POINT_PATH, name)
-            );
+        public int getShopPlayerPoints(final @NotNull String shopName) {
+            return this.shopSection.getInt(ShopSection.replaceFormat(ShopPluginBuySection.SHOP_BUY_PLUGIN_PLAYER_POINT_PATH, shopName));
         }
 
         /**
          * 獲取購買所需的 PlayerPoint 插件點數
-         * @param name 商店名稱
+         * @param shopName 商店名稱
          * @return 插件點數
          */
-        public double getShopVault(final @NotNull String name) {
-            return this.shopSection.getLoader().getDouble(
-                    ShopSection.replaceFormat(ShopPluginBuySection.SHOP_BUY_PLUGIN_VAULT_PATH, name)
-            );
+        public double getShopVault(final @NotNull String shopName) {
+            return this.shopSection.getDouble(ShopSection.replaceFormat(ShopPluginBuySection.SHOP_BUY_PLUGIN_VAULT_PATH, shopName));
         }
 
     }

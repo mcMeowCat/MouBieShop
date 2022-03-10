@@ -1,5 +1,6 @@
 package com.cat.server.shop;
 
+import com.cat.server.io.operates.ShopOperate;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,7 +12,7 @@ import java.util.Map;
  */
 public final class Shop {
 
-    // 商店操作
+    // 商店管理器
     @NotNull
     private final ShopOperate operate;
 
@@ -35,27 +36,21 @@ public final class Shop {
      * 商店名稱 (檔案名稱)
      * @param shopName 商店名稱
      */
-    public Shop(final @NotNull ShopOperate operate, final @NotNull String shopName) {
-        // 商店操作加載
+    public Shop(final @NotNull String shopName, final @NotNull ShopOperate operate) {
+        // 商店操作類
         this.operate = operate;
 
         // 商店基本訊息加載
         this.name = shopName;
-        this.giveItem = operate.reader.getShopGiveItem(shopName);
+        this.giveItem = operate.getShopGiveItem(shopName);
 
         // 購買條件 (Minecraft)
-        this.minecraftDemandContent.setExp(
-                operate.reader.toMinecraftBuySectionReader().getShopBuyExp(shopName)
-        );
-
-        this.minecraftDemandContent.setItems(
-                operate.reader.toMinecraftBuySectionReader().getShopBuyItems(shopName)
-        );
+        this.minecraftDemandContent.setExp(operate.getShopMinecraftBuyExp(shopName));
+        this.minecraftDemandContent.setItems(operate.getShopMinecraftBuyItems(shopName));
 
         // 購買條件 (Plugin)
-        this.pluginDemandContent.setPlayerPoints(
-                operate.reader.toPluginBuySectionReader().getShopPlayerPoints(shopName)
-        );
+        this.pluginDemandContent.setPlayerPoints(operate.getShopPluginBuyPlayerPoints(shopName));
+        this.pluginDemandContent.setVault(operate.getShopPluginVaultMoney(shopName));
     }
 
     /**
@@ -68,56 +63,57 @@ public final class Shop {
     }
 
     /**
-     * 獲取購買後的物品項目
+     * 獲取購買成功時給予的物品
      * @return 物品項目
      */
     @NotNull
-    public ItemStack getShopGiveItem() {
+    public ItemStack getGiveItem() {
         return this.giveItem;
     }
 
     /**
-     * 設置商店購買後給予的物品項目
+     * 設定購買成功時給予的物品
      * @param item 物品項目
      */
-    public void setShopGiveItem(final @NotNull ItemStack item) {
-        this.operate.writer.setShopGiveItem(this.name, item);
+    public void setGiveItem(final @NotNull ItemStack item) {
+        this.operate.setShopGiveItem(this.name, item);
         this.giveItem = item;
     }
 
     /**
-     * 獲取購買所需的經驗值
+     * 獲取購買時所需的經驗值
      * @return 經驗值
      */
-    public int getShopBuyExp() {
+    public int getBuyExp() {
         return this.minecraftDemandContent.getExp();
     }
 
     /**
-     * 寫入購買所需的經驗值
+     * 設定購買時所需的經驗值
      * @param exp 經驗值
      */
-    public void setShopBuyExp(final int exp) {
-        this.operate.writer.toMinecraftBuySectionWriter().setShopBuyExp(this.name, exp);
+    public void setBuyExp(final int exp) {
+        this.operate.setShopMinecraftBuyExp(this.name, exp);
         this.minecraftDemandContent.setExp(exp);
     }
 
     /**
-     * 獲取購買所需的物品項目
-     * @return 物品項目
+     * 獲取所有購買時所需的物品
+     * @return 物品項目(s)
      */
     @NotNull
-    public Map<String, ItemStack> getShopBuyItems() {
+    public Map<String, ItemStack> getBuyItems() {
         return this.minecraftDemandContent.getItems();
     }
 
     /**
-     * 添加一個購買所需的物品
-     * @param key 物品路徑示標符
-     * @param item 物品
+     * 添加一個購買時所需的物品
+     * @param key 識別碼
+     * @param item 物品項目
+     * @return 是否添加成功
      */
-    public boolean addShopBuyItems(final @NotNull String key, final @NotNull ItemStack item) {
-        if (this.operate.writer.toMinecraftBuySectionWriter().addShopBuyItems(this.name, key, item)) {
+    public boolean addBuyItem(final @NotNull String key, final @NotNull ItemStack item) {
+        if (this.operate.addShopMinecraftBuyItem(this.name, key, item)) {
             this.minecraftDemandContent.getItems().put(key, item);
             return true;
         }
@@ -126,46 +122,45 @@ public final class Shop {
     }
 
     /**
-     * 刪除一個購買所需的物品
-     * @param key 物品路徑示標符
+     * 刪除一個購買時所需的物品
+     * @param key 物品識別碼
      */
-    public void removeShopBuyItems(final @NotNull String key) {
-        this.operate.writer.toMinecraftBuySectionWriter().removeShopBuyItems(this.name, key);
-        this.minecraftDemandContent.getItems().remove(key);
+    public void removeBuyItem(final @NotNull String key) {
+        this.operate.removeShopMinecraftBuyItem(this.name, key);
     }
 
     /**
-     * 獲取購買所需的 PlayerPoint 插件點數
-     * @return 插件點數
+     * 獲取購買時所需的 PlayerPoints 點數
+     * @return 點數
      */
-    public int getShopPlayerPoint() {
+    public int getBuyPlayerPoints() {
         return this.pluginDemandContent.getPlayerPoints();
     }
 
     /**
-     * 寫入購買所需的 PlayerPoint 插件點數
-     * @param point 插件點數
+     * 設定購買時所需的 PlayerPoints 點數
+     * @param point 點數
      */
-    public void setShopPlayerPoint(final int point) {
-        this.operate.writer.toPluginBuySectionWriter().setShopPlayerPoints(this.name, point);
+    public void setBuyPlayerPoints(final int point) {
+        this.operate.setShopPluginBuyPlayerPoints(this.name, point);
         this.pluginDemandContent.setPlayerPoints(point);
     }
 
     /**
-     * 獲取購買所需的 Vault 插件金錢
-     * @return 插件點數
+     * 獲取購買時所需的 Vault 金錢
+     * @return 金錢
      */
-    public double getShopVault() {
+    public double getBuyVault() {
         return this.pluginDemandContent.getVault();
     }
 
     /**
-     * 寫入購買所需的 Vault 插件金錢
-     * @param vault 插件金錢
+     * 設置購買時所需的 Vault 金錢
+     * @param money 金錢
      */
-    public void setShopPlayerPoint(final double vault) {
-        this.operate.writer.toPluginBuySectionWriter().setShopVault(this.name, vault);
-        this.pluginDemandContent.setVault(vault);
+    public void setBuyVault(final double money) {
+        this.operate.setShopPluginVaultMoney(this.name, money);
+        this.pluginDemandContent.setVault(money);
     }
 
 }

@@ -2,6 +2,7 @@ package com.cat.server.command;
 
 import com.cat.server.MouBieCat;
 import com.cat.server.command.args.CommandCreate;
+import com.cat.server.command.args.CommandRemove;
 import com.moubieapi.moubieapi.commands.MainCommandAbstract;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +19,7 @@ public final class CommandMain
      */
     public CommandMain() {
         this.commandManager.add("create", new CommandCreate("create"));
+        this.commandManager.add("remove", new CommandRemove("remove"));
     }
 
     /**

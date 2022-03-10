@@ -2,7 +2,7 @@ package com.cat.server;
 
 import com.cat.server.command.CommandMain;
 import com.cat.server.loader.ShopStoreLoader;
-import com.cat.server.manager.ShopStoreManager;
+import com.cat.server.manager.StoreManager;
 import com.moubieapi.api.plugin.PluginRegister;
 import com.moubieapi.moubieapi.plugin.MouBiePluginBase;
 import org.bukkit.command.PluginCommand;
@@ -21,7 +21,7 @@ public final class MouBieCat
 
     // 商店管理器
     @NotNull
-    private final ShopStoreManager manager = new ShopStoreManager();
+    private final StoreManager manager = new StoreManager();
 
     @PluginRegister(name = "加載所有商店", type = PluginRegister.ActionType.ACTION_ENABLE, priority = PluginRegister.ActionPriority.HIGHEST)
     public void loadShops() {
@@ -60,7 +60,7 @@ public final class MouBieCat
      * @return 管理器
      */
     @NotNull
-    public ShopStoreManager getShopManager() {
+    public StoreManager getStoreManager() {
         return this.manager;
     }
 

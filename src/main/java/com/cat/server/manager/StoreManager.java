@@ -1,0 +1,39 @@
+package com.cat.server.manager;
+
+import com.cat.server.shop.Store;
+import com.moubieapi.moubieapi.manager.ManagerAbstract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+/**
+ * 代表店鋪管理器
+ * @author MouBieCat
+ */
+public final class StoreManager
+        extends ManagerAbstract<String, Store> {
+
+    /**
+     * 添加一筆紀錄
+     * @param key 店鋪名稱
+     * @param value 店鋪實例
+     */
+    @Override
+    public void add(final @NotNull String key, final @NotNull Store value) {
+        if (!this.hasKey(key))
+            super.add(key, value);
+    }
+
+    /**
+     * 刪除一筆店鋪
+     * @param key 店鋪名稱
+     */
+    @Override
+    public void remove(final @NotNull String key) {
+        final @Nullable Store shopManager = super.get(key);
+        if (shopManager != null)
+            shopManager.removeStore();
+
+        super.remove(key);
+    }
+
+}

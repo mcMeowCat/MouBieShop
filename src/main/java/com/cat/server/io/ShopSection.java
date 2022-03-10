@@ -1,30 +1,46 @@
-package com.cat.server.shop;
+package com.cat.server.io;
 
+import com.cat.server.MouBieCat;
 import com.moubieapi.moubieapi.yaml.Loader;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
 
 /**
  * 代表商店檔案細節部分操作基底類
  * @author MouBieCat
  */
-abstract class ShopSection {
+abstract class ShopSection
+        extends Loader {
+
+    private static final String FILE_PATH = "shops" + File.separator;
+
+    protected static final String STORE_SHOPS_PATH = "Shops";
 
     protected static final String STORE_TITLE_PATH = "info.title";
 
     protected static final String SHOP_GIVE_ITEM_PATH = "Shops.{name}.give_item";
 
-    // 檔案加載器
+    // 店鋪名稱
     @NotNull
-    protected final Loader loader;
+    protected final String storeName;
 
     /**
      * 建構子
-     * @param loader 檔案加載器
+     * @param storeName 店鋪名稱
      */
-    public ShopSection(final @NotNull Loader loader) {
-        this.loader = loader;
+    public ShopSection(final @NotNull String storeName) {
+        super(MouBieCat.getInstance(), FILE_PATH, storeName + ".yml", true);
+        this.storeName = storeName;
+    }
+
+    /**
+     * 獲取店鋪名稱
+     * @return 名稱
+     */
+    @NotNull
+    public String getStoreName() {
+        return this.storeName;
     }
 
     /**
@@ -36,15 +52,6 @@ abstract class ShopSection {
     @NotNull
     public static String replaceFormat(final @NotNull String format, final @NotNull String shopName) {
         return format.replace("{name}", shopName);
-    }
-
-    /**
-     * 獲取檔案加載器
-     * @return 加載器
-     */
-    @NotNull
-    protected final Loader getLoader() {
-        return this.loader;
     }
 
     /**
@@ -105,7 +112,7 @@ abstract class ShopSection {
     protected static abstract class ShopPluginBuySection
             extends ShopBuySectionBase {
 
-        protected static final String SHOP_BUY_PLUGIN_PLAYER_POINT_PATH = "Shops.{name}.buy.PLUGIN.PlayerPoint";
+        protected static final String SHOP_BUY_PLUGIN_PLAYER_POINT_PATH = "Shops.{name}.buy.PLUGIN.PlayerPoints";
 
         protected static final String SHOP_BUY_PLUGIN_VAULT_PATH = "Shops.{name}.buy.PLUGIN.Vault";
 
@@ -115,16 +122,6 @@ abstract class ShopSection {
          */
         public ShopPluginBuySection(final @NotNull ShopSection shopSection) {
             super(shopSection);
-        }
-
-        /**
-         * 該插件依賴是否存在
-         * @param name 插件名稱
-         * @return 是否可依賴
-         */
-        protected final boolean isHookPlugin(final @NotNull String name) {
-            final Plugin plugin = Bukkit.getPluginManager().getPlugin(name);
-            return plugin != null && plugin.isEnabled();
         }
 
     }

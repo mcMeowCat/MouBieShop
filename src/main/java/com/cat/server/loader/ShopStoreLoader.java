@@ -1,7 +1,7 @@
 package com.cat.server.loader;
 
 import com.cat.server.MouBieCat;
-import com.cat.server.manager.ShopManager;
+import com.cat.server.shop.Store;
 import com.moubieapi.api.manager.Manager;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,23 +31,13 @@ public final class ShopStoreLoader {
      * 加載所有商店
      * @param manager 管理器
      */
-    public int loadStores(final @NotNull Manager<String, ShopManager> manager) {
+    public int loadStores(final @NotNull Manager<String, Store> manager) {
         final List<File> storeFiles = this.getStoreFiles();
 
         int count = 0;
         for (final File file : storeFiles) {
-            // -= !!! =-
-            // Test.yml -> Test
-            // 如果不將副檔名替換為空，插件重讀時商店會被複製。
             final String storeName = file.getName().replace(".yml", "");
-
-            final ShopManager shopManager = new ShopManager(storeName);
-            final int shopCount = new ShopLoader().loadShops(shopManager);
-
-            // DeBug Message
-            MouBieCat.getInstance().getDebugger().info("ShopStoreLoader#loadStores -> §a成功從 §6" + storeName + " §a加載了 §6" + shopCount + " §a個商店。");
-
-            manager.add(storeName, shopManager);
+            manager.add(storeName, new Store(storeName));
             count++;
         }
 

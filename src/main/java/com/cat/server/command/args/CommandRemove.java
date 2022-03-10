@@ -1,11 +1,10 @@
 package com.cat.server.command.args;
 
 import com.cat.server.MouBieCat;
-import com.cat.server.manager.StoreManager;
-import com.cat.server.result.RemoveResult;
-import com.cat.server.result.Result;
-import com.cat.server.shop.Shop;
-import com.cat.server.shop.Store;
+import com.cat.server.api.MouBieShop;
+import com.cat.server.api.result.Result;
+import com.cat.server.api.shop.Shop;
+import com.cat.server.api.shop.Store;
 import com.moubieapi.api.commands.SenderType;
 import com.moubieapi.moubieapi.commands.SubcommandAbstract;
 import org.bukkit.command.CommandSender;
@@ -45,11 +44,11 @@ public final class CommandRemove
 
             // 刪除店鋪
             if (args.length == 2)
-                result = this.removeStore(args[1]);
+                result = MouBieShop.removeStore(args[1]);
 
             // 刪除商店
             if (args.length == 3)
-                result = this.removeShopInStore(args[1], args[2]);
+                result = MouBieShop.removeShopInStore(args[1], args[2]);
 
             if (result != null)
                 sender.sendMessage(MouBieCat.PLUGIN_TITLE + result.getMessage());
@@ -73,58 +72,18 @@ public final class CommandRemove
 
         // 顯示所有店鋪名稱
         if (args.length == 2) {
-            final Collection<Store> values = MouBieCat.getInstance().getStoreManager().getValues();
+            final Collection<Store> values = MouBieShop.getStoreManager().getValues();
             list.addAll(values.stream().map(Store::getShoreName).toList());
         }
 
         // 顯示所有店鋪中的商店
         if (args.length == 3) {
-            final @Nullable Store manager = MouBieCat.getInstance().getStoreManager().get(args[1]);
+            final @Nullable Store manager = MouBieShop.getStoreManager().get(args[1]);
             if (manager != null)
                 list.addAll(manager.getValues().stream().map(Shop::getName).toList());
         }
 
         return list;
-    }
-
-    /**
-     * 刪除一個店鋪
-     * @param storeName 店鋪名稱
-     * @return 刪除結果
-     */
-    @NotNull
-    private RemoveResult removeStore(final @NotNull String storeName) {
-        final StoreManager storeManager = MouBieCat.getInstance().getStoreManager();
-
-        if (storeManager.hasKey(storeName)) {
-            storeManager.remove(storeName);
-            return RemoveResult.REMOVE_STORE_SUCCESS;
-        }
-
-        return RemoveResult.REMOVE_STORE_ERROR_NAME;
-    }
-
-    /**
-     * 刪除一個店鋪
-     * @param storeName 店鋪名稱
-     * @param shopName 商店名稱
-     * @return 刪除結果
-     */
-    @NotNull
-    private RemoveResult removeShopInStore(final @NotNull String storeName, final @NotNull String shopName) {
-        final StoreManager storeManager = MouBieCat.getInstance().getStoreManager();
-
-        final @Nullable Store store = storeManager.get(storeName);
-        if (store != null) {
-            if (store.hasKey(shopName)) {
-                store.remove(shopName);
-                return RemoveResult.REMOVE_SHOP_SUCCESS;
-            }
-
-            return RemoveResult.REMOVE_SHOP_ERROR_NAME;
-        }
-
-        return RemoveResult.REMOVE_STORE_ERROR_NAME;
     }
 
 }

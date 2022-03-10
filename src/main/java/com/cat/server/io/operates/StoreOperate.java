@@ -1,6 +1,6 @@
 package com.cat.server.io.operates;
 
-import com.cat.server.shop.Shop;
+import com.cat.server.api.shop.Shop;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

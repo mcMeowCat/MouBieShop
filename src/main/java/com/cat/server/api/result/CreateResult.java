@@ -1,4 +1,4 @@
-package com.cat.server.result;
+package com.cat.server.api.result;
 
 import org.jetbrains.annotations.NotNull;
 

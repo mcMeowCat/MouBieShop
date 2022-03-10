@@ -1,5 +1,7 @@
 package com.cat.server.shop;
 
+import com.cat.server.api.shop.Shop;
+import com.cat.server.api.shop.Store;
 import com.cat.server.io.operates.StoreOperate;
 import com.moubieapi.moubieapi.manager.ManagerAbstract;
 import org.jetbrains.annotations.NotNull;
@@ -9,8 +11,9 @@ import org.jetbrains.annotations.Nullable;
  * 代表商店管理器
  * @author MouBieCat
  */
-public final class Store
-        extends ManagerAbstract<String, Shop> {
+public final class ShopStore
+        extends ManagerAbstract<String, Shop>
+        implements Store {
 
     // 店鋪商店操作
     @NotNull
@@ -24,7 +27,7 @@ public final class Store
      * 建構子
      * @param storeName 店鋪名稱
      */
-    public Store(final @NotNull String storeName) {
+    public ShopStore(final @NotNull String storeName) {
         this.operate = new StoreOperate(storeName);
 
         // 處理商店資訊
@@ -72,19 +75,19 @@ public final class Store
     /**
      * 刪除整個店鋪包含檔案
      */
-    public void removeStore() {
+    public void deleteStoreFile() {
         this.operate.removeStore();
     }
 
     /**
      * 添加一筆商店
      * @param key 商店名稱
-     * @param value 商店實例 (可以為空)
+     * @param value 商店實例 (設置為 null)
      */
     @Override
     public void add(final @NotNull String key, final @Nullable Shop value) {
         if (!this.hasKey(key) && this.operate.createShop(key))
-            super.add(key, new Shop(key, this.operate));
+            super.add(key, new ShopObject(key, this.operate));
     }
 
     /**

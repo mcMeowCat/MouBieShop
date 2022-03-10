@@ -1,7 +1,8 @@
 package com.cat.server.io;
 
+import com.cat.server.api.shop.Shop;
 import com.cat.server.io.operates.ShopOperate;
-import com.cat.server.shop.Shop;
+import com.cat.server.shop.ShopObject;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +38,7 @@ public final class ShopSectionReader
 
         final Map<String, Shop> shops = new HashMap<>();
         for (final String shopName : section.getKeys(false))
-            shops.put(shopName, new Shop(shopName, operate));
+            shops.put(shopName, new ShopObject(shopName, operate));
 
         return shops;
     }

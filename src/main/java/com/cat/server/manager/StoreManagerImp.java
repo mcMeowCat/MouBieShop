@@ -1,6 +1,7 @@
 package com.cat.server.manager;
 
-import com.cat.server.shop.Store;
+import com.cat.server.api.manager.StoreManager;
+import com.cat.server.api.shop.Store;
 import com.moubieapi.moubieapi.manager.ManagerAbstract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -9,8 +10,9 @@ import org.jetbrains.annotations.Nullable;
  * 代表店鋪管理器
  * @author MouBieCat
  */
-public final class StoreManager
-        extends ManagerAbstract<String, Store> {
+public final class StoreManagerImp
+        extends ManagerAbstract<String, Store>
+        implements StoreManager {
 
     /**
      * 添加一筆紀錄
@@ -31,7 +33,7 @@ public final class StoreManager
     public void remove(final @NotNull String key) {
         final @Nullable Store shopManager = super.get(key);
         if (shopManager != null)
-            shopManager.removeStore();
+            shopManager.deleteStoreFile();
 
         super.remove(key);
     }

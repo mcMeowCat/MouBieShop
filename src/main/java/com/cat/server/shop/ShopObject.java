@@ -1,5 +1,6 @@
 package com.cat.server.shop;
 
+import com.cat.server.api.shop.Shop;
 import com.cat.server.io.operates.ShopOperate;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +11,8 @@ import java.util.Map;
  * 代表一個商店
  * @author MouBieCat
  */
-public final class Shop {
+public final class ShopObject
+        implements Shop {
 
     // 商店管理器
     @NotNull
@@ -36,7 +38,7 @@ public final class Shop {
      * 商店名稱 (檔案名稱)
      * @param shopName 商店名稱
      */
-    public Shop(final @NotNull String shopName, final @NotNull ShopOperate operate) {
+    public ShopObject(final @NotNull String shopName, final @NotNull ShopOperate operate) {
         // 商店操作類
         this.operate = operate;
 

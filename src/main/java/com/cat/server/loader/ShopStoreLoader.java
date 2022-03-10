@@ -1,8 +1,8 @@
 package com.cat.server.loader;
 
 import com.cat.server.MouBieCat;
-import com.cat.server.shop.Store;
-import com.moubieapi.api.manager.Manager;
+import com.cat.server.api.manager.StoreManager;
+import com.cat.server.shop.ShopStore;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -31,13 +31,13 @@ public final class ShopStoreLoader {
      * 加載所有商店
      * @param manager 管理器
      */
-    public int loadStores(final @NotNull Manager<String, Store> manager) {
+    public int loadStores(final @NotNull StoreManager manager) {
         final List<File> storeFiles = this.getStoreFiles();
 
         int count = 0;
         for (final File file : storeFiles) {
             final String storeName = file.getName().replace(".yml", "");
-            manager.add(storeName, new Store(storeName));
+            manager.add(storeName, new ShopStore(storeName));
             count++;
         }
 

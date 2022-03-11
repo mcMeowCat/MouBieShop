@@ -18,3 +18,9 @@ commands:
 permissions:
   MouBieShop.create:
     description: "是否可以創建店鋪或是商店。"
+
+  MouBieShop.remove:
+    description: "是否可以刪除店鋪或是商店。"
+
+  MouBieShop.editor:
+    description: "是否可以編輯店鋪或是商店。"

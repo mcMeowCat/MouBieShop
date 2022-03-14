@@ -4,8 +4,11 @@ import com.cat.server.MouBieCat;
 import com.cat.server.api.MouBieShop;
 import com.cat.server.api.shop.Shop;
 import com.cat.server.api.shop.Store;
-import com.cat.server.command.attributes.Attributes;
+import com.moubieapi.api.commands.SenderType;
+import com.moubieapi.moubieapi.commands.SubcommandAbstract;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,18 +17,18 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * 用於編輯店鋪屬性的指令
+ * 用於購買商點的指令
  * @author MouBieCat
  */
-public final class CommandEditStore
-        extends CommandEditBase {
+public final class CommandBuy
+        extends SubcommandAbstract {
 
     /**
      * 建構子
      * @param name        子指令名
      */
-    public CommandEditStore(final @NotNull String name) {
-        super(name, "用於編輯店鋪屬性的指令。");
+    public CommandBuy(final @NotNull String name) {
+        super(name, new Permission("MouBieShop.buy"), SenderType.PLAYER_SENDER, "用於購買商點的指令。");
     }
 
     /**
@@ -37,35 +40,23 @@ public final class CommandEditStore
     public boolean onCmd(final @NotNull CommandSender sender, final @NotNull String[] args) {
 
         if (args.length >= 3) {
-            final @Nullable Store store = MouBieShop.getStore(args[1]);
-            final @Nullable Attributes attributes = Attributes.getCommandAttribute(args[2]);
-
-            // 基本檢查
-            if (store == null || attributes == null)
+            final @Nullable Shop shop = MouBieShop.getShop(args[1], args[2]);
+            if (shop == null) {
+                sender.sendMessage(MouBieCat.PLUGIN_TITLE + "§c很抱歉，您所指定購買的商店不存在。");
                 return false;
-
-            // 是否成功編輯
-            boolean isSuccessEdit = false;
-
-            switch (attributes) {
-                case STORE_TITLE_ATTRIBUTE -> {
-                    if (args.length == 4) {
-                        store.setStoreTitle(args[3]);
-                        isSuccessEdit = true;
-                    }
-                }
-
-                default -> sender.sendMessage("§c很抱歉，目前沒有這個編輯屬性。");
             }
 
-            if (isSuccessEdit)
-                sender.sendMessage(MouBieCat.PLUGIN_TITLE + "§f您成功編輯了 §6" + attributes.getName() + " §f屬性。");
+            if (args.length == 3)
+                return MouBieShop.buyShop(shop, (Player) sender, false);
 
-            return isSuccessEdit;
+            if (args.length == 4)
+                return MouBieShop.buyShop(shop, (Player) sender, Boolean.parseBoolean(args[3]));
         }
 
         return false;
     }
+
+    // mbs buy <store> <shop>
 
     /**
      * 運行該節點指令幫助列表
@@ -73,7 +64,6 @@ public final class CommandEditStore
      * @param args   參數
      * @return 節點指令幫助列表
      */
-    @Override
     @NotNull
     public List<String> onTab(final @NotNull CommandSender sender, final @NotNull String[] args) {
         final List<String> list = new ArrayList<>();
@@ -84,14 +74,19 @@ public final class CommandEditStore
             list.addAll(values.stream().map(Store::getShoreName).toList());
         }
 
-        // 顯示所有可編輯屬性
+        // 顯示所有店鋪中的商店
         if (args.length == 3) {
-            for (Attributes attributes : Attributes.values()) {
-                if (attributes.checkClass(Store.class))
-                    list.add(attributes.getCommand());
-            }
+            final @Nullable Store manager = MouBieShop.getStoreManager().get(args[1]);
+            if (manager != null)
+                list.addAll(manager.getValues().stream().map(Shop::getName).toList());
+        }
+
+        // 是否繞過購買需求檢查
+        if (args.length == 4) {
+            list.add("true"); list.add("false");
         }
 
         return list;
     }
+
 }

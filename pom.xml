@@ -31,6 +31,11 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
+
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <!-- 導入依賴 -->
@@ -57,6 +62,24 @@
             <artifactId>MouBieCat</artifactId>
             <version>1.0.0</version>
         </dependency>
+
+        <!-- Vault -->
+        <dependency>
+            <groupId>com.github.MilkBowl</groupId>
+            <artifactId>VaultAPI</artifactId>
+            <version>1.7.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- PlayerPoints -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>4.0.3</version>
+            <scope>system</scope>
+            <systemPath>D:/IntellIj Project/MouBieShop/PlayerPoints-3.2.1.jar</systemPath>
+        </dependency>
+
     </dependencies>
 
     <!-- 建構 -->

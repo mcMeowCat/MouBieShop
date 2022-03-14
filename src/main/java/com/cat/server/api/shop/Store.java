@@ -42,6 +42,6 @@ public interface Store
      * @param shop 商店(可為空)
      */
     @Override
-    void add(@NotNull String shopName, @Nullable Shop shop);
+    void add(@NotNull String shopName, @Nullable @Deprecated Shop shop);
 
 }

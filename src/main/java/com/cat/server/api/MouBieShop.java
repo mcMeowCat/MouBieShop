@@ -6,7 +6,7 @@ import com.cat.server.api.result.CreateResult;
 import com.cat.server.api.result.RemoveResult;
 import com.cat.server.api.shop.Shop;
 import com.cat.server.api.shop.Store;
-import com.cat.server.shop.ShopStore;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -81,7 +81,7 @@ public final class MouBieShop {
 
         // 是否已經擁有該商店
         if (!storeManager.hasKey(storeName)) {
-            storeManager.add(storeName, new ShopStore(storeName));
+            storeManager.add(storeName, null);
 
             // 成功創建
             return CreateResult.CREATE_STORE_SUCCESS;
@@ -156,6 +156,27 @@ public final class MouBieShop {
         }
 
         return RemoveResult.REMOVE_STORE_ERROR_NAME;
+    }
+
+    /**
+     * 購買物品
+     * @param shop 商品
+     * @param player 購買者
+     * @param noChecker 是否繞過購買檢測
+     * @return 是否成功購買
+     */
+    public static boolean buyShop(@NotNull Shop shop, @NotNull Player player, boolean noChecker) {
+        if (noChecker) {
+            shop.buy(player);
+            return true;
+        }
+
+        else if (shop.buyCheck(player)) {
+            shop.buy(player);
+            return true;
+        }
+
+        return false;
     }
 
 }

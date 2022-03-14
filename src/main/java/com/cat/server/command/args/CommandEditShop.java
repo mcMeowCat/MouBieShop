@@ -1,5 +1,6 @@
 package com.cat.server.command.args;
 
+import com.cat.server.MouBieCat;
 import com.cat.server.api.MouBieShop;
 import com.cat.server.api.shop.Shop;
 import com.cat.server.api.shop.Store;
@@ -47,14 +48,21 @@ public final class CommandEditShop
             if (shop == null || attributes == null)
                 return false;
 
+            // 是否成功編輯
+            boolean isSuccessEdit = false;
+
             switch (attributes) {
-                case SHOP_GIVE_ITEM_ATTRIBUTE -> shop.setGiveItem(((Player) sender).getInventory().getItemInMainHand());
+                case SHOP_GIVE_ITEM_ATTRIBUTE -> {
+                    shop.setGiveItem(((Player) sender).getInventory().getItemInMainHand());
+                    isSuccessEdit = true;
+                }
 
                 case SHOP_BUY_MINECRAFT_EXP_ATTRIBUTE -> {
                     if (args.length == 5) {
                         try {
                             final int exp = Integer.parseInt(args[4]);
                             shop.setBuyExp(exp);
+                            isSuccessEdit = true;
                         } catch (final NumberFormatException ignored) {}
                     }
                 }
@@ -71,6 +79,8 @@ public final class CommandEditShop
                             shop.setBuyItem(args[5], null);
                             shop.setBuyItem(args[5], ((Player) sender).getInventory().getItemInMainHand());
                         }
+
+                        isSuccessEdit = true;
                     }
                 }
 
@@ -79,6 +89,7 @@ public final class CommandEditShop
                         try {
                             final int playerPoints = Integer.parseInt(args[4]);
                             shop.setBuyPlayerPoints(playerPoints);
+                            isSuccessEdit = true;
                         } catch (final NumberFormatException ignored) {}
                     }
                 }
@@ -88,14 +99,18 @@ public final class CommandEditShop
                         try {
                             final double vault = Double.parseDouble(args[4]);
                             shop.setBuyVault(vault);
+                            isSuccessEdit = true;
                         } catch (final NumberFormatException ignored) {}
                     }
                 }
 
-                default -> sender.sendMessage("§c很抱歉，目前沒有這個編輯屬性。");
+                default -> sender.sendMessage(MouBieCat.PLUGIN_TITLE + "§c很抱歉，目前沒有這個編輯屬性。");
             }
 
-            return true;
+            if (isSuccessEdit)
+                sender.sendMessage(MouBieCat.PLUGIN_TITLE + "§f您成功編輯了 §6" + attributes.getName() + " §f屬性。");
+
+            return isSuccessEdit;
         }
 
         return false;

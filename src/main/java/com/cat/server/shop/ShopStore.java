@@ -85,7 +85,7 @@ public final class ShopStore
      * @param value 商店實例 (設置為 null)
      */
     @Override
-    public void add(final @NotNull String key, final @Nullable Shop value) {
+    public void add(final @NotNull String key, final @Nullable @Deprecated Shop value) {
         if (!this.hasKey(key) && this.operate.createShop(key))
             super.add(key, new ShopObject(key, this.operate));
     }

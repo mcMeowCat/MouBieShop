@@ -2,6 +2,7 @@ package com.cat.server.manager;
 
 import com.cat.server.api.manager.StoreManager;
 import com.cat.server.api.shop.Store;
+import com.cat.server.shop.ShopStore;
 import com.moubieapi.moubieapi.manager.ManagerAbstract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,9 +21,9 @@ public final class StoreManagerImp
      * @param value 店鋪實例
      */
     @Override
-    public void add(final @NotNull String key, final @NotNull Store value) {
+    public void add(final @NotNull String key, final @Nullable @Deprecated Store value) {
         if (!this.hasKey(key))
-            super.add(key, value);
+            super.add(key, new ShopStore(key));
     }
 
     /**

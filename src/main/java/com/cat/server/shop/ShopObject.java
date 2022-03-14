@@ -1,7 +1,11 @@
 package com.cat.server.shop;
 
+import com.cat.server.api.manager.BuyCheckerManager;
 import com.cat.server.api.shop.Shop;
 import com.cat.server.io.operates.ShopOperate;
+import com.cat.server.api.shop.Checker;
+import com.cat.server.manager.CheckerManagerImp;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,6 +38,10 @@ public final class ShopObject
     // 購買商品所需的條件(Plugin)
     @NotNull
     private final PluginDemandContent pluginDemandContent = new PluginDemandContent();
+
+    // 購買檢查
+    @NotNull
+    private final BuyCheckerManager checkerManager = new CheckerManagerImp();
 
     /**
      * 商店名稱 (檔案名稱)
@@ -116,11 +124,8 @@ public final class ShopObject
      */
     public void setBuyItem(final @NotNull String key, final @Nullable ItemStack item) {
         if (item != null) {
-
-            if (this.operate.addShopMinecraftBuyItem(this.name, key, item)) {
+            if (this.operate.addShopMinecraftBuyItem(this.name, key, item))
                 this.minecraftDemandContent.getItems().put(key, item);
-                return;
-            }
 
             return;
         }
@@ -161,6 +166,37 @@ public final class ShopObject
     public void setBuyVault(final double money) {
         this.operate.setShopPluginVaultMoney(this.name, money);
         this.pluginDemandContent.setVault(money);
+    }
+
+    /**
+     * 獲取購買檢查器
+     * @return 檢查器
+     */
+    @NotNull
+    public BuyCheckerManager getBuyCheckers() {
+        return this.checkerManager;
+    }
+
+    /**
+     * 購買該物品
+     * @param player 玩家
+     */
+    public void buy(final @NotNull Player player) {
+        player.getInventory().addItem(this.giveItem);
+    }
+
+    /**
+     * 購買檢查
+     * @param player 玩家
+     * @return 是否可以購買
+     */
+    public boolean buyCheck(final @NotNull Player player) {
+        for (final Checker checker : this.checkerManager.getValues()) {
+            if (!checker.check(this, player))
+                return false;
+        }
+
+        return true;
     }
 
 }

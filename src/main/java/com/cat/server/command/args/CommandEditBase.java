@@ -1,13 +1,9 @@
 package com.cat.server.command.args;
 
-import com.cat.server.command.attributes.Attributes;
 import com.moubieapi.api.commands.SenderType;
 import com.moubieapi.moubieapi.commands.SubcommandAbstract;
 import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 代表一個編輯指令基底類
@@ -15,10 +11,6 @@ import java.util.List;
  */
 public abstract class CommandEditBase
         extends SubcommandAbstract {
-
-    // 可編輯屬性集合
-    @NotNull
-    protected final List<Attributes> attributes = new ArrayList<>();
 
     /**
      * 建構子

@@ -1,10 +1,12 @@
 package com.cat.server.command.args;
 
 import com.cat.server.api.MouBieShop;
+import com.cat.server.api.shop.Shop;
 import com.cat.server.api.shop.Store;
 import com.cat.server.command.attributes.Attributes;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,7 +25,6 @@ public final class CommandEditStore
      */
     public CommandEditStore(final @NotNull String name) {
         super(name, "用於編輯店鋪屬性的指令。");
-        this.attributes.add(Attributes.STORE_TITLE_ATTRIBUTE);
     }
 
     /**
@@ -33,6 +34,27 @@ public final class CommandEditStore
      * @return 是否成功運行
      */
     public boolean onCmd(final @NotNull CommandSender sender, final @NotNull String[] args) {
+
+        if (args.length >= 3) {
+            final @Nullable Store store = MouBieShop.getStore(args[1]);
+            final @Nullable Attributes attributes = Attributes.getCommandAttribute(args[2]);
+
+            // 基本檢查
+            if (store == null || attributes == null)
+                return false;
+
+            switch (attributes) {
+                case STORE_TITLE_ATTRIBUTE -> {
+                    if (args.length == 4)
+                        store.setStoreTitle(args[3]);
+                }
+
+                default -> sender.sendMessage("§c很抱歉，目前沒有這個編輯屬性。");
+            }
+
+            return true;
+        }
+
         return false;
     }
 
@@ -54,8 +76,12 @@ public final class CommandEditStore
         }
 
         // 顯示所有可編輯屬性
-        if (args.length == 3)
-            list.addAll(this.attributes.stream().map(Attributes::getCommand).toList());
+        if (args.length == 3) {
+            for (Attributes attributes : Attributes.values()) {
+                if (attributes.checkClass(Store.class))
+                    list.add(attributes.getCommand());
+            }
+        }
 
         return list;
     }

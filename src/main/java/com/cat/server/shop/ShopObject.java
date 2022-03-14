@@ -4,6 +4,7 @@ import com.cat.server.api.shop.Shop;
 import com.cat.server.io.operates.ShopOperate;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
@@ -112,23 +113,20 @@ public final class ShopObject
      * 添加一個購買時所需的物品
      * @param key 識別碼
      * @param item 物品項目
-     * @return 是否添加成功
      */
-    public boolean addBuyItem(final @NotNull String key, final @NotNull ItemStack item) {
-        if (this.operate.addShopMinecraftBuyItem(this.name, key, item)) {
-            this.minecraftDemandContent.getItems().put(key, item);
-            return true;
+    public void setBuyItem(final @NotNull String key, final @Nullable ItemStack item) {
+        if (item != null) {
+
+            if (this.operate.addShopMinecraftBuyItem(this.name, key, item)) {
+                this.minecraftDemandContent.getItems().put(key, item);
+                return;
+            }
+
+            return;
         }
 
-        return false;
-    }
-
-    /**
-     * 刪除一個購買時所需的物品
-     * @param key 物品識別碼
-     */
-    public void removeBuyItem(final @NotNull String key) {
         this.operate.removeShopMinecraftBuyItem(this.name, key);
+        this.minecraftDemandContent.getItems().remove(key);
     }
 
     /**

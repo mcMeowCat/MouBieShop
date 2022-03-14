@@ -2,6 +2,7 @@ package com.cat.server.api.shop;
 
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
@@ -47,15 +48,8 @@ public interface Shop {
      * 添加一個購買時所需的物品
      * @param key 識別碼
      * @param item 物品項目
-     * @return 是否添加成功
      */
-    boolean addBuyItem(@NotNull String key, @NotNull ItemStack item);
-
-    /**
-     * 刪除一個購買時所需的物品
-     * @param key 物品識別碼
-     */
-    void removeBuyItem(@NotNull String key);
+    void setBuyItem(@NotNull String key, @Nullable ItemStack item);
 
     /**
      * 獲取購買時所需的 PlayerPoints 點數

@@ -44,6 +44,7 @@ public final class ShopSectionWriter
      */
     public void setStoreTitle(final @NotNull String title) {
         this.set(ShopSection.STORE_TITLE_PATH, title);
+        this.save();
     }
 
     /**

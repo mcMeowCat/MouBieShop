@@ -27,20 +27,20 @@ public final class MouBieCat
 
 
     @PluginRegister(name = "掛勾API", type = PluginRegister.ActionType.ACTION_LOAD, priority = PluginRegister.ActionPriority.HIGHEST)
-    public void loadAPIs() {
+    public void onLoadAPI() {
         MouBieShop.setAPI(this);
     }
 
 
     @PluginRegister(name = "加載所有商店", type = PluginRegister.ActionType.ACTION_ENABLE, priority = PluginRegister.ActionPriority.HIGHEST)
-    public void loadShops() {
+    public void onEnableLoadStores() {
         final int count = new ShopStoreLoader("shops").loadStores(this.manager);
         this.getDebugger().info("§a成功加載了 §6" + count + " §a個店鋪。");
     }
 
 
     @PluginRegister(name = "註冊插件指令", type = PluginRegister.ActionType.ACTION_ENABLE)
-    public void loadCommands() {
+    public void onEnableCommands() {
         final @Nullable PluginCommand mouBieShop = this.getCommand("MouBieShop");
         if (mouBieShop != null)
             mouBieShop.setExecutor(new CommandMain());
@@ -48,7 +48,7 @@ public final class MouBieCat
 
 
     @PluginRegister(name = "重讀所有商店", type = PluginRegister.ActionType.ACTION_RELOAD)
-    public void reloadShops() {
+    public void onReloadStores() {
         this.manager.clear();
         final int count = new ShopStoreLoader("shops").loadStores(this.manager);
         this.getDebugger().info("§e成功重載了 §6" + count + " §e個商店。");

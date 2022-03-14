@@ -5,10 +5,12 @@ import com.cat.server.api.shop.Shop;
 import com.cat.server.api.shop.Store;
 import com.cat.server.command.attributes.Attributes;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -19,17 +21,14 @@ import java.util.List;
 public final class CommandEditShop
         extends CommandEditBase {
 
+    private final List<String> ITEM_EDITOR = Arrays.asList("add", "remove", "edit");
+
     /**
      * 建構子
      * @param name        子指令名
      */
     public CommandEditShop(final @NotNull String name) {
         super(name, "用於編輯商店屬性的指令。");
-        this.attributes.add(Attributes.SHOP_GIVE_ITEM_ATTRIBUTE);
-        this.attributes.add(Attributes.SHOP_BUY_MINECRAFT_EXP_ATTRIBUTE);
-        this.attributes.add(Attributes.SHOP_BUY_MINECRAFT_ITEMS_ATTRIBUTE);
-        this.attributes.add(Attributes.SHOP_BUY_PLUGIN_PLAYER_POINTS_ATTRIBUTE);
-        this.attributes.add(Attributes.SHOP_BUY_PLUGIN_VAULT_ATTRIBUTE);
     }
 
     /**
@@ -39,6 +38,66 @@ public final class CommandEditShop
      * @return 是否成功運行
      */
     public boolean onCmd(final @NotNull CommandSender sender, final @NotNull String[] args) {
+
+        if (args.length >= 4) {
+            final @Nullable Shop shop = MouBieShop.getShop(args[1], args[2]);
+            final @Nullable Attributes attributes = Attributes.getCommandAttribute(args[3]);
+
+            // 基本檢查
+            if (shop == null || attributes == null)
+                return false;
+
+            switch (attributes) {
+                case SHOP_GIVE_ITEM_ATTRIBUTE -> shop.setGiveItem(((Player) sender).getInventory().getItemInMainHand());
+
+                case SHOP_BUY_MINECRAFT_EXP_ATTRIBUTE -> {
+                    if (args.length == 5) {
+                        try {
+                            final int exp = Integer.parseInt(args[4]);
+                            shop.setBuyExp(exp);
+                        } catch (final NumberFormatException ignored) {}
+                    }
+                }
+
+                case SHOP_BUY_MINECRAFT_ITEMS_ATTRIBUTE -> {
+                    if (args.length == 6) {
+                        if (args[4].equalsIgnoreCase(ITEM_EDITOR.get(0)))
+                            shop.setBuyItem(args[5], ((Player) sender).getInventory().getItemInMainHand());
+
+                        else if (args[4].equalsIgnoreCase(ITEM_EDITOR.get(1)))
+                            shop.setBuyItem(args[5], null);
+
+                        else if (args[4].equalsIgnoreCase(ITEM_EDITOR.get(2))) {
+                            shop.setBuyItem(args[5], null);
+                            shop.setBuyItem(args[5], ((Player) sender).getInventory().getItemInMainHand());
+                        }
+                    }
+                }
+
+                case SHOP_BUY_PLUGIN_PLAYER_POINTS_ATTRIBUTE -> {
+                    if (args.length == 5) {
+                        try {
+                            final int playerPoints = Integer.parseInt(args[4]);
+                            shop.setBuyPlayerPoints(playerPoints);
+                        } catch (final NumberFormatException ignored) {}
+                    }
+                }
+
+                case SHOP_BUY_PLUGIN_VAULT_ATTRIBUTE -> {
+                    if (args.length == 5) {
+                        try {
+                            final double vault = Double.parseDouble(args[4]);
+                            shop.setBuyVault(vault);
+                        } catch (final NumberFormatException ignored) {}
+                    }
+                }
+
+                default -> sender.sendMessage("§c很抱歉，目前沒有這個編輯屬性。");
+            }
+
+            return true;
+        }
+
         return false;
     }
 
@@ -67,8 +126,24 @@ public final class CommandEditShop
         }
 
         // 顯示所有可編輯屬性
-        if (args.length == 4)
-            list.addAll(this.attributes.stream().map(Attributes::getCommand).toList());
+        if (args.length == 4) {
+            for (Attributes attributes : Attributes.values()) {
+                if (attributes.checkClass(Shop.class))
+                    list.add(attributes.getCommand());
+            }
+        }
+
+        // 顯示物品操作
+        if (args.length == 5) {
+            if (args[3].equalsIgnoreCase(Attributes.SHOP_BUY_MINECRAFT_ITEMS_ATTRIBUTE.getCommand()))
+                return this.ITEM_EDITOR;
+        }
+
+        if (args.length == 6) {
+            final @Nullable Shop shop = MouBieShop.getShop(args[1], args[2]);
+            if (shop != null)
+                list.addAll(shop.getBuyItems().keySet());
+        }
 
         return list;
     }

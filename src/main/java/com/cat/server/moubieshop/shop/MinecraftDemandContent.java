@@ -1,4 +1,4 @@
-package com.cat.server.shop;
+package com.cat.server.moubieshop.shop;
 
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;

@@ -1,8 +1,8 @@
-package com.cat.server.loader;
+package com.cat.server.moubieshop.loader;
 
+import com.cat.server.moubieshop.store.ShopStore;
 import com.cat.server.MouBieCat;
-import com.cat.server.api.manager.StoreManager;
-import com.cat.server.shop.ShopStore;
+import com.cat.server.api.StoreManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -13,7 +13,7 @@ import java.util.List;
  * 代表所有商店加載器
  * @author MouBieCat
  */
-public final class ShopStoreLoader {
+public final class StoreLoader {
 
     // 檔案路徑
     @NotNull
@@ -23,7 +23,7 @@ public final class ShopStoreLoader {
      * 建構子
      * @param path 檔案路徑
      */
-    public ShopStoreLoader(final @NotNull String path) {
+    public StoreLoader(final @NotNull String path) {
         this.filePath = path;
     }
 

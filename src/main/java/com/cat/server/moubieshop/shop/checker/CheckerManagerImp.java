@@ -1,9 +1,8 @@
-package com.cat.server.manager;
+package com.cat.server.moubieshop.shop.checker;
 
-import com.cat.server.api.manager.BuyCheckerManager;
-import com.cat.server.api.shop.Checker;
-import com.cat.server.shop.checker.*;
-import com.moubieapi.moubieapi.manager.ManagerAbstract;
+import com.cat.server.api.shop.checker.Checker;
+import com.cat.server.api.shop.checker.CheckerManager;
+import com.moubiecat.core.manager.ManagerAbstract;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -12,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class CheckerManagerImp
         extends ManagerAbstract<String, Checker>
-        implements BuyCheckerManager {
+        implements CheckerManager {
 
     /**
      * 建構子

@@ -1,7 +1,7 @@
 package com.cat.server.command.args;
 
-import com.moubieapi.api.commands.SenderType;
-import com.moubieapi.moubieapi.commands.SubcommandAbstract;
+import com.moubiecat.api.commands.SenderType;
+import com.moubiecat.core.commands.SubcommandAbstract;
 import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.NotNull;
 

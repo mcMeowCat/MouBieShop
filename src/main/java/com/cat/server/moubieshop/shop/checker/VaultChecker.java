@@ -1,6 +1,6 @@
-package com.cat.server.shop.checker;
+package com.cat.server.moubieshop.shop.checker;
 
-import com.cat.server.api.shop.Checker;
+import com.cat.server.api.shop.checker.Checker;
 import com.cat.server.api.shop.Shop;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -24,11 +24,10 @@ public final class VaultChecker
      */
     public boolean check(final @NotNull Shop shop, final @NotNull Player player) {
         final @Nullable Plugin vaultPlugin = Bukkit.getPluginManager().getPlugin("Vault");
-
         if (vaultPlugin == null)
             return true;
 
-        final @NotNull Economy economy = (Economy) vaultPlugin;
+        final Economy economy = (Economy) vaultPlugin;
         return economy.getBalance(player) >= shop.getBuyVault();
     }
 

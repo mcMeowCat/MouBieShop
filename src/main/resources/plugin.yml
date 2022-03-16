@@ -1,7 +1,7 @@
 name: MouBieShop
 
 version: '${project.version}'
-api-version: ${plugin.api.version}
+api-version: '${plugin-yml.api-version}'
 
 authors: [ MouBieCat ]
 

@@ -1,6 +1,6 @@
-package com.cat.server.shop;
+package com.cat.server.moubieshop.store;
 
-import com.moubieapi.api.Utils;
+import com.moubiecat.api.Utils;
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

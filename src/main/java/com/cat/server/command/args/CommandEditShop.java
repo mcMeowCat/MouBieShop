@@ -113,6 +113,7 @@ public final class CommandEditShop
             return isSuccessEdit;
         }
 
+        sender.sendMessage(MouBieCat.PLUGIN_TITLE + "§c很抱歉，您所輸入的參數不足，請參閱插件幫助訊息。");
         return false;
     }
 

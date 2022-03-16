@@ -1,6 +1,6 @@
 package com.cat.server.api.shop;
 
-import com.moubieapi.api.manager.Manager;
+import com.moubiecat.api.manager.Manager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,11 +27,6 @@ public interface Store
     void setStoreTitle(@NotNull String title);
 
     /**
-     * 從配置中讀取所有商店
-     */
-    void loadShops();
-
-    /**
      * 刪除整個店鋪包含檔案
      */
     void deleteStoreFile();
@@ -39,9 +34,9 @@ public interface Store
     /**
      * 添加一個商店到該管理器中
      * @param shopName 商店名稱
-     * @param shop 商店(可為空)
+     * @param shop 商店
      */
     @Override
-    void add(@NotNull String shopName, @Nullable @Deprecated Shop shop);
+    void add(@NotNull String shopName, @Nullable Shop shop);
 
 }

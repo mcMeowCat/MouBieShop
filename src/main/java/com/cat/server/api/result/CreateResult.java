@@ -9,12 +9,12 @@ import org.jetbrains.annotations.NotNull;
 public enum CreateResult
         implements Result {
 
-    CREATE_STORE_SUCCESS(1, "§f完成，您成功創建了該店鋪。"),
-    CREATE_STORE_ERROR_NAME(2, "§c很抱歉，您所定義的店舖名稱已經存在，請更換一個店鋪名稱。"),
+    CREATE_STORE_SUCCESS(0, "§f完成，您成功創建了該店鋪。"),
+    CREATE_STORE_ERROR_NAME(1, "§c很抱歉，您所定義的店舖名稱已經存在，請更換一個店鋪名稱。"),
 
-    CREATE_SHOP_SUCCESS(3, "§f完成，您成功創建了該商店在店鋪中，請設定商店資訊否則伺服器重啟時商店將被刪除。"),
-    CREATE_SHOP_ERROR_SHORE(4, "§c很抱歉，您所輸入的店鋪不存在，該此無法為您創建該商店。"),
-    CREATE_SHOP_ERROR_NAME(5, "§c很抱歉，您所定義的商店名稱已經存在，請更換一個商店名稱。"),
+    CREATE_SHOP_SUCCESS(2, "§f完成，您成功創建了該商店在店鋪中，請設定商店資訊否則伺服器重啟時商店將被刪除。"),
+    CREATE_SHOP_ERROR_SHORE(3, "§c很抱歉，您所輸入的店鋪不存在，該此無法為您創建該商店。"),
+    CREATE_SHOP_ERROR_NAME(4, "§c很抱歉，您所定義的商店名稱已經存在，請更換一個商店名稱。"),
 
     ;
 

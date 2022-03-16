@@ -1,10 +1,9 @@
 package com.cat.server.command.args;
 
+import com.cat.server.command.attributes.Attributes;
 import com.cat.server.MouBieCat;
 import com.cat.server.api.MouBieShop;
-import com.cat.server.api.shop.Shop;
 import com.cat.server.api.shop.Store;
-import com.cat.server.command.attributes.Attributes;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -64,6 +63,7 @@ public final class CommandEditStore
             return isSuccessEdit;
         }
 
+        sender.sendMessage(MouBieCat.PLUGIN_TITLE + "§c很抱歉，您所輸入的參數不足，請參閱插件幫助訊息。");
         return false;
     }
 

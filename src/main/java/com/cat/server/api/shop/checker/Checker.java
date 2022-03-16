@@ -1,5 +1,6 @@
-package com.cat.server.api.shop;
+package com.cat.server.api.shop.checker;
 
+import com.cat.server.api.shop.Shop;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 

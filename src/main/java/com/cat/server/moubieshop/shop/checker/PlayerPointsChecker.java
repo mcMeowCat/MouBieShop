@@ -1,11 +1,14 @@
-package com.cat.server.shop.checker;
+package com.cat.server.moubieshop.shop.checker;
 
-import com.cat.server.api.shop.Checker;
+import com.cat.server.api.shop.checker.Checker;
 import com.cat.server.api.shop.Shop;
 import org.black_ixx.playerpoints.PlayerPoints;
+import org.black_ixx.playerpoints.PlayerPointsAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 檢查 PlayerPoints 是否足夠
@@ -21,10 +24,12 @@ public final class PlayerPointsChecker
      * @return 是否通過
      */
     public boolean check(final @NotNull Shop shop, final @NotNull Player player) {
-        if (Bukkit.getPluginManager().getPlugin("PlayerPoints") == null)
+        final @Nullable Plugin playerPoints = Bukkit.getPluginManager().getPlugin("PlayerPoints");
+        if (playerPoints == null)
             return true;
 
-        return PlayerPoints.getInstance().getAPI().look(player.getUniqueId()) >= shop.getBuyPlayerPoints();
+        final PlayerPointsAPI api = ((PlayerPoints) playerPoints).getAPI();
+        return api.look(player.getUniqueId()) >= shop.getBuyPlayerPoints();
     }
 
 }

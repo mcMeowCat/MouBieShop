@@ -1,4 +1,4 @@
-package com.cat.server.shop;
+package com.cat.server.moubieshop.shop;
 
 /**
  * 代表購買商品的需求內容物(Plugin)

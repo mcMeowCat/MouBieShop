@@ -1,6 +1,6 @@
-package com.cat.server.shop.checker;
+package com.cat.server.moubieshop.shop.checker;
 
-import com.cat.server.api.shop.Checker;
+import com.cat.server.api.shop.checker.Checker;
 import com.cat.server.api.shop.Shop;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -25,28 +25,32 @@ public final class ItemsChecker
      */
     public boolean check(final @NotNull Shop shop, final @NotNull Player player) {
         final Collection<ItemStack> items = shop.getBuyItems().values();
-        final PlayerInventory playerInventory = player.getInventory();
 
         for (final ItemStack item : items) {
-            boolean isFoundItem = false;
-
-            for (int slotId = 0; slotId <= 35; slotId++) {
-                final @Nullable ItemStack playerItem = playerInventory.getItem(slotId);
-                if (playerItem == null)
-                    continue;
-
-                if (item.equals(playerItem)) {
-                    isFoundItem = true;
-                    break;
-                }
-            }
-
-            if (!isFoundItem)
+            if (!this.check0(item, player))
                 return false;
-
         }
 
         return true;
+    }
+
+    /**
+     * 細部檢查玩家是否擁有該物品
+     * @param itemStack 物品
+     * @param player 玩家
+     * @return 是否擁有
+     */
+    private boolean check0(final @NotNull ItemStack itemStack, final @NotNull Player player) {
+        final PlayerInventory inventory = player.getInventory();
+
+        for (int checkSlotId = 0; checkSlotId <= 35; checkSlotId++) {
+            final @Nullable ItemStack item = inventory.getItem(checkSlotId);
+
+            if (itemStack.equals(item))
+                return true;
+        }
+
+        return false;
     }
 
 }

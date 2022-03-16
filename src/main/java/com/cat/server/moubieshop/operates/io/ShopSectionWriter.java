@@ -1,4 +1,4 @@
-package com.cat.server.io;
+package com.cat.server.moubieshop.operates.io;
 
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +26,7 @@ public final class ShopSectionWriter
      * @return 是否創建成功
      */
     public boolean createShop(final @NotNull String shopName) {
-        return !this.configuration.contains(ShopSection.STORE_SHOPS_PATH + "." + shopName);
+        return !this.configuration.contains(STORE_SHOPS_PATH + "." + shopName);
     }
 
     /**
@@ -34,8 +34,8 @@ public final class ShopSectionWriter
      * @param shopName 商店名
      */
     public void removeShop(final @NotNull String shopName) {
-        if (this.configuration.contains(ShopSection.STORE_SHOPS_PATH + "." + shopName))
-            this.configuration.set(ShopSection.STORE_SHOPS_PATH + "." + shopName, null);
+        if (this.configuration.contains(STORE_SHOPS_PATH + "." + shopName))
+            this.configuration.set(STORE_SHOPS_PATH + "." + shopName, null);
     }
 
     /**
@@ -43,7 +43,7 @@ public final class ShopSectionWriter
      * @param title 標題
      */
     public void setStoreTitle(final @NotNull String title) {
-        this.set(ShopSection.STORE_TITLE_PATH, title);
+        this.set(STORE_TITLE_PATH, title);
         this.save();
     }
 
@@ -53,7 +53,7 @@ public final class ShopSectionWriter
      * @param item 物品項目
      */
     public void setShopGiveItem(final @NotNull String shopName, final @NotNull ItemStack item) {
-        this.set(ShopSection.replaceFormat(ShopSection.SHOP_GIVE_ITEM_PATH, shopName), item);
+        this.set(replaceFormat(SHOP_GIVE_ITEM_PATH, shopName), item);
         this.save();
     }
 
@@ -96,7 +96,7 @@ public final class ShopSectionWriter
          * @param exp 經驗值
          */
         public void setShopBuyExp(final @NotNull String shopName, final int exp) {
-            this.shopSection.set(ShopSection.replaceFormat(ShopMinecraftBuySection.SHOP_BUY_MINECRAFT_EXP_PATH, shopName), exp);
+            this.shopSection.set(replaceFormat(SHOP_BUY_MINECRAFT_EXP_PATH, shopName), exp);
             this.shopSection.save();
         }
 
@@ -108,7 +108,7 @@ public final class ShopSectionWriter
          */
         public boolean addShopBuyItems(final @NotNull String shopName, final @NotNull String key, final @NotNull ItemStack item) {
             final String keyPath =
-                    ShopSection.replaceFormat(ShopMinecraftBuySection.SHOP_BUY_MINECRAFT_ITEMS_PATH, shopName) + "." + key;
+                    replaceFormat(SHOP_BUY_MINECRAFT_ITEMS_PATH, shopName) + "." + key;
 
             if (!this.shopSection.getConfiguration().contains(keyPath)) {
                 this.shopSection.set(keyPath, item);
@@ -127,7 +127,7 @@ public final class ShopSectionWriter
         @SuppressWarnings("all")
         public void removeShopBuyItems(final @NotNull String shopName, final @NotNull String key) {
             final String keyPath =
-                    ShopSection.replaceFormat(ShopMinecraftBuySection.SHOP_BUY_MINECRAFT_ITEMS_PATH, shopName) + "." + key;
+                    replaceFormat(SHOP_BUY_MINECRAFT_ITEMS_PATH, shopName) + "." + key;
 
             this.shopSection.set(keyPath, null);
             this.shopSection.save();
@@ -156,7 +156,7 @@ public final class ShopSectionWriter
          * @param point 插件點數
          */
         public void setShopPlayerPoints(final @NotNull String shopName, final int point) {
-            this.shopSection.set(ShopSection.replaceFormat(ShopPluginBuySection.SHOP_BUY_PLUGIN_PLAYER_POINT_PATH, shopName), point);
+            this.shopSection.set(replaceFormat(SHOP_BUY_PLUGIN_PLAYER_POINT_PATH, shopName), point);
             this.shopSection.save();
         }
 
@@ -166,7 +166,7 @@ public final class ShopSectionWriter
          * @param vault 插件金錢
          */
         public void setShopVault(final @NotNull String shopName, final double vault) {
-            this.shopSection.set(ShopSection.replaceFormat(ShopPluginBuySection.SHOP_BUY_PLUGIN_VAULT_PATH, shopName), vault);
+            this.shopSection.set(replaceFormat(SHOP_BUY_PLUGIN_VAULT_PATH, shopName), vault);
             this.shopSection.save();
         }
 

@@ -3,16 +3,15 @@ package com.cat.server.api.result;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 代表店鋪或商店刪除的結果
+ * 購買商店結果
  * @author MouBieCat
  */
-public enum RemoveResult
+public enum BuyResult
         implements Result {
 
-    REMOVE_STORE_SUCCESS(0, "§f完成，您成功刪除了該店鋪。"),
-    REMOVE_STORE_ERROR_NAME(1, "§c很抱歉，您所指定的店舖名稱沒有找到，所以沒有刪除任何店鋪。"),
-    REMOVE_SHOP_SUCCESS(2, "§f完成，您成功刪除了該商店於店鋪中。"),
-    REMOVE_SHOP_ERROR_NAME(3, "§c很抱歉，您所指定的商店名稱沒有找到，所以沒有刪除任何商店。")
+    BUY_SUCCESS(0, "§f完成。您成功購買了該商店物品。"),
+    BUY_ERROR(1, "§c失敗。您沒有達到該商店的購買需求，因此購買商品沒有成功。"),
+    BUY_SUCCESS_NOT_CHECKER(3, "§f完成。您成功購買了該商店物品，且為未經購買需求檢查。"),
     ;
 
     // 結果ID
@@ -27,7 +26,7 @@ public enum RemoveResult
      * @param id 獲取結果ID
      * @param message 獲取果訊息
      */
-    RemoveResult(final int id, final @NotNull String message) {
+    BuyResult(final int id, final @NotNull String message) {
         this.id = id;
         this.message = message;
     }
@@ -36,6 +35,7 @@ public enum RemoveResult
      * 獲取結果ID
      * @return ID
      */
+    @Override
     public final int getId() {
         return this.id;
     }

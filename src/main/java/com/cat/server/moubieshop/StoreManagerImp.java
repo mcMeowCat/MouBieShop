@@ -1,9 +1,9 @@
-package com.cat.server.manager;
+package com.cat.server.moubieshop;
 
-import com.cat.server.api.manager.StoreManager;
+import com.cat.server.moubieshop.store.ShopStore;
+import com.cat.server.api.StoreManager;
 import com.cat.server.api.shop.Store;
-import com.cat.server.shop.ShopStore;
-import com.moubieapi.moubieapi.manager.ManagerAbstract;
+import com.moubiecat.core.manager.ManagerAbstract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

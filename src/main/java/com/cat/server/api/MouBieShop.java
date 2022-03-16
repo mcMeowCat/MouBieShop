@@ -1,7 +1,7 @@
 package com.cat.server.api;
 
 import com.cat.server.MouBieCat;
-import com.cat.server.api.manager.StoreManager;
+import com.cat.server.api.result.BuyResult;
 import com.cat.server.api.result.CreateResult;
 import com.cat.server.api.result.RemoveResult;
 import com.cat.server.api.shop.Shop;
@@ -165,18 +165,8 @@ public final class MouBieShop {
      * @param noChecker 是否繞過購買檢測
      * @return 是否成功購買
      */
-    public static boolean buyShop(@NotNull Shop shop, @NotNull Player player, boolean noChecker) {
-        if (noChecker) {
-            shop.buy(player);
-            return true;
-        }
-
-        else if (shop.buyCheck(player)) {
-            shop.buy(player);
-            return true;
-        }
-
-        return false;
+    public static BuyResult buyShop(@NotNull Shop shop, @NotNull Player player, boolean noChecker) {
+        return shop.buy(player, noChecker);
     }
 
 }

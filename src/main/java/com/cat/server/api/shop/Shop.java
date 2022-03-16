@@ -1,6 +1,7 @@
 package com.cat.server.api.shop;
 
-import com.cat.server.api.manager.BuyCheckerManager;
+import com.cat.server.api.result.BuyResult;
+import com.cat.server.api.shop.checker.CheckerManager;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -81,13 +82,13 @@ public interface Shop {
      * 獲取購買檢查器
      * @return 檢查器
      */
-    @NotNull BuyCheckerManager getBuyCheckers();
+    @NotNull CheckerManager getBuyCheckers();
 
     /**
      * 購買該物品
      * @param player 玩家
      */
-    void buy(@NotNull Player player);
+    @NotNull BuyResult buy(@NotNull Player player, boolean checker);
 
     /**
      * 購買檢查

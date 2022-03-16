@@ -1,8 +1,8 @@
-package com.cat.server.io;
+package com.cat.server.moubieshop.operates.io;
 
+import com.cat.server.moubieshop.operates.ShopOperate;
+import com.cat.server.moubieshop.shop.ShopObject;
 import com.cat.server.api.shop.Shop;
-import com.cat.server.io.operates.ShopOperate;
-import com.cat.server.shop.ShopObject;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +32,7 @@ public final class ShopSectionReader
      */
     @NotNull
     public Map<String, Shop> parsingShops(final @NotNull ShopOperate operate) {
-        final @Nullable ConfigurationSection section = this.configuration.getConfigurationSection(ShopSection.STORE_SHOPS_PATH);
+        final @Nullable ConfigurationSection section = this.configuration.getConfigurationSection(STORE_SHOPS_PATH);
         if (section == null)
             return new HashMap<>();
 
@@ -49,7 +49,7 @@ public final class ShopSectionReader
      */
     @Nullable
     public String getStoreTitle() {
-        return this.getConfiguration().getString(ShopSection.STORE_TITLE_PATH);
+        return this.getConfiguration().getString(STORE_TITLE_PATH);
     }
 
     /**
@@ -59,7 +59,7 @@ public final class ShopSectionReader
      */
     @NotNull
     public ItemStack getShopGiveItem(final @NotNull String shopName) {
-        return this.getItemStack(ShopSection.replaceFormat(ShopSection.SHOP_GIVE_ITEM_PATH, shopName));
+        return this.getItemStack(replaceFormat(SHOP_GIVE_ITEM_PATH, shopName));
     }
 
     /**
@@ -101,7 +101,7 @@ public final class ShopSectionReader
          * @return 經驗值
          */
         public int getShopBuyExp(final @NotNull String shopName) {
-            return this.shopSection.getInt(ShopSection.replaceFormat(ShopMinecraftBuySection.SHOP_BUY_MINECRAFT_EXP_PATH, shopName));
+            return this.shopSection.getInt(replaceFormat(SHOP_BUY_MINECRAFT_EXP_PATH, shopName));
         }
 
         /**
@@ -111,7 +111,7 @@ public final class ShopSectionReader
          */
         @NotNull
         public Map<String, ItemStack> getShopBuyItems(final @NotNull String shopName) {
-            final String path = ShopSection.replaceFormat(ShopMinecraftBuySection.SHOP_BUY_MINECRAFT_ITEMS_PATH, shopName);
+            final String path = replaceFormat(SHOP_BUY_MINECRAFT_ITEMS_PATH, shopName);
 
             final @Nullable ConfigurationSection section = this.shopSection.getConfiguration().getConfigurationSection(path);
             if (section == null)
@@ -148,7 +148,7 @@ public final class ShopSectionReader
          * @return 插件點數
          */
         public int getShopPlayerPoints(final @NotNull String shopName) {
-            return this.shopSection.getInt(ShopSection.replaceFormat(ShopPluginBuySection.SHOP_BUY_PLUGIN_PLAYER_POINT_PATH, shopName));
+            return this.shopSection.getInt(replaceFormat(SHOP_BUY_PLUGIN_PLAYER_POINT_PATH, shopName));
         }
 
         /**
@@ -157,7 +157,7 @@ public final class ShopSectionReader
          * @return 插件點數
          */
         public double getShopVault(final @NotNull String shopName) {
-            return this.shopSection.getDouble(ShopSection.replaceFormat(ShopPluginBuySection.SHOP_BUY_PLUGIN_VAULT_PATH, shopName));
+            return this.shopSection.getDouble(replaceFormat(SHOP_BUY_PLUGIN_VAULT_PATH, shopName));
         }
 
     }

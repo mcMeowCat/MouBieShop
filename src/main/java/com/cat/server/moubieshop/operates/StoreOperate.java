@@ -1,4 +1,4 @@
-package com.cat.server.io.operates;
+package com.cat.server.moubieshop.operates;
 
 import com.cat.server.api.shop.Shop;
 import org.jetbrains.annotations.NotNull;

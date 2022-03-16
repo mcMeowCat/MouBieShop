@@ -2,7 +2,7 @@ package com.cat.server.command;
 
 import com.cat.server.MouBieCat;
 import com.cat.server.command.args.*;
-import com.moubieapi.moubieapi.commands.MainCommandAbstract;
+import com.moubiecat.core.commands.MainCommandAbstract;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 

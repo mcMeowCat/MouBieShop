@@ -1,12 +1,12 @@
 package com.cat.server;
 
-import com.cat.server.api.MouBieShop;
-import com.cat.server.api.manager.StoreManager;
 import com.cat.server.command.CommandMain;
-import com.cat.server.loader.ShopStoreLoader;
-import com.cat.server.manager.StoreManagerImp;
-import com.moubieapi.api.plugin.PluginRegister;
-import com.moubieapi.moubieapi.plugin.MouBiePluginBase;
+import com.cat.server.moubieshop.loader.StoreLoader;
+import com.cat.server.moubieshop.StoreManagerImp;
+import com.cat.server.api.MouBieShop;
+import com.cat.server.api.StoreManager;
+import com.moubiecat.api.plugin.PluginRegister;
+import com.moubiecat.core.plugin.MouBiePluginBase;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +34,7 @@ public final class MouBieCat
 
     @PluginRegister(name = "加載所有商店", type = PluginRegister.ActionType.ACTION_ENABLE, priority = PluginRegister.ActionPriority.HIGHEST)
     public void onEnableLoadStores() {
-        final int count = new ShopStoreLoader("shops").loadStores(this.manager);
+        final int count = new StoreLoader("shops").loadStores(this.manager);
         this.getDebugger().info("§a成功加載了 §6" + count + " §a個店鋪。");
     }
 
@@ -50,7 +50,7 @@ public final class MouBieCat
     @PluginRegister(name = "重讀所有商店", type = PluginRegister.ActionType.ACTION_RELOAD)
     public void onReloadStores() {
         this.manager.clear();
-        final int count = new ShopStoreLoader("shops").loadStores(this.manager);
+        final int count = new StoreLoader("shops").loadStores(this.manager);
         this.getDebugger().info("§e成功重載了 §6" + count + " §e個商店。");
     }
 

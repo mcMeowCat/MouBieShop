@@ -1,7 +1,7 @@
-package com.cat.server.io.operates;
+package com.cat.server.moubieshop.operates;
 
-import com.cat.server.io.ShopSectionReader;
-import com.cat.server.io.ShopSectionWriter;
+import com.cat.server.moubieshop.operates.io.ShopSectionReader;
+import com.cat.server.moubieshop.operates.io.ShopSectionWriter;
 import org.jetbrains.annotations.NotNull;
 
 /**

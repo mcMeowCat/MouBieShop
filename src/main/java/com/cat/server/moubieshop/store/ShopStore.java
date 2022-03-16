@@ -1,9 +1,10 @@
-package com.cat.server.shop;
+package com.cat.server.moubieshop.store;
 
+import com.cat.server.moubieshop.operates.StoreOperate;
 import com.cat.server.api.shop.Shop;
 import com.cat.server.api.shop.Store;
-import com.cat.server.io.operates.StoreOperate;
-import com.moubieapi.moubieapi.manager.ManagerAbstract;
+import com.cat.server.moubieshop.shop.ShopObject;
+import com.moubiecat.core.manager.ManagerAbstract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -67,7 +68,7 @@ public final class ShopStore
     /**
      * 從配置中讀取所有商店
      */
-    public void loadShops() {
+    private void loadShops() {
         this.clear();
         this.manager.putAll(this.operate.parsingShops());
     }
@@ -85,7 +86,7 @@ public final class ShopStore
      * @param value 商店實例 (設置為 null)
      */
     @Override
-    public void add(final @NotNull String key, final @Nullable @Deprecated Shop value) {
+    public void add(final @NotNull String key, final @Nullable Shop value) {
         if (!this.hasKey(key) && this.operate.createShop(key))
             super.add(key, new ShopObject(key, this.operate));
     }

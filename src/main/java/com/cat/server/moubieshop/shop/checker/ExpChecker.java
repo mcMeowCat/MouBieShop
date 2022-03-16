@@ -1,6 +1,6 @@
-package com.cat.server.shop.checker;
+package com.cat.server.moubieshop.shop.checker;
 
-import com.cat.server.api.shop.Checker;
+import com.cat.server.api.shop.checker.Checker;
 import com.cat.server.api.shop.Shop;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

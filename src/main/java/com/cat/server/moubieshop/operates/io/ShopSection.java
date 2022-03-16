@@ -1,7 +1,7 @@
-package com.cat.server.io;
+package com.cat.server.moubieshop.operates.io;
 
 import com.cat.server.MouBieCat;
-import com.moubieapi.moubieapi.yaml.Loader;
+import com.moubiecat.core.yaml.Loader;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;

@@ -1,7 +1,7 @@
-package com.cat.server.api.manager;
+package com.cat.server.api;
 
 import com.cat.server.api.shop.Store;
-import com.moubieapi.api.manager.Manager;
+import com.moubiecat.api.manager.Manager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

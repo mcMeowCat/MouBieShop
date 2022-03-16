@@ -4,25 +4,29 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.cat.server</groupId>
+    <groupId>com.moubiecat.server</groupId>
     <artifactId>MouBieShop</artifactId>
     <version>1.0.0</version>
 
     <name>MouBieAPI</name>
     <description>作為 MouBieCat 開發的功能，可以創建自己的交易商店介面。</description>
 
+    <!-- 基本配置 -->
     <properties>
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <!-- 譯環境配置 -->
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jdk.version>17</jdk.version>
-        <java.version>17</java.version>
 
-        <!-- api-version: -->
-        <plugin.api.version>1.18</plugin.api.version>
-
-        <!-- maven library version -->
+        <!-- net-minecraft-server / Spigot(api) 版本配置 -->
         <spigot.api.version>1.18-R0.1-SNAPSHOT</spigot.api.version>
+
+        <!-- plugin.yml 配置 -->
+        <plugin-yml.api-version>1.18</plugin-yml.api-version>
+
+        <!-- 代碼環境 測試環境配置 -->
+        <code.sourceDirectory>src/main/java</code.sourceDirectory>
+        <code.testSourceDirectory>src/test/java</code.testSourceDirectory>
     </properties>
 
     <!-- 從雲端倉庫下載依賴到本地倉庫 -->
@@ -45,7 +49,7 @@
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>23.0.0</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Spigot API -->
@@ -58,9 +62,10 @@
 
         <!-- MouBieAPI -->
         <dependency>
-            <groupId>com.cat.moubieapi</groupId>
-            <artifactId>MouBieCat</artifactId>
+            <groupId>com.moubiecat</groupId>
+            <artifactId>MouBieAPI-framework</artifactId>
             <version>1.0.0</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Vault -->
@@ -73,29 +78,51 @@
 
         <!-- PlayerPoints -->
         <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-            <version>4.0.3</version>
-            <scope>system</scope>
-            <systemPath>D:/IntellIj Project/MouBieShop/PlayerPoints-3.2.1.jar</systemPath>
+            <groupId>org.black_ixx</groupId>
+            <artifactId>PlayerPoints</artifactId>
+            <version>2.1.3</version>
+            <scope>provided</scope>
         </dependency>
-
     </dependencies>
 
     <!-- 建構 -->
     <build>
+        <!-- 環境 -->
+        <sourceDirectory>${code.sourceDirectory}</sourceDirectory>
+        <testSourceDirectory>${code.testSourceDirectory}</testSourceDirectory>
+
         <plugins>
+            <!-- maven-compiler-plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                 </configuration>
+            </plugin>
+
+            <!-- maven-shade-plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
 
+        <!-- 資源檔 -->
         <resources>
             <resource>
                 <directory>src/main/resources</directory>

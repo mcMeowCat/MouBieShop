@@ -11,7 +11,7 @@ public enum BuyResult
 
     BUY_SUCCESS(0, "§f完成。您成功購買了該商店物品。"),
     BUY_ERROR(1, "§c失敗。您沒有達到該商店的購買需求，因此購買商品沒有成功。"),
-    BUY_SUCCESS_NOT_CHECKER(3, "§f完成。您成功購買了該商店物品，且為未經購買需求檢查。"),
+    BUY_SUCCESS_NOT_CHECKER(2, "§f完成。您成功購買了該商店物品，且為未經購買需求檢查。"),
     ;
 
     // 結果ID

@@ -181,21 +181,21 @@ public final class ShopObject
     /**
      * 購買該物品
      * @param player 玩家
-     * @param checker 是否經過購買檢查
+     * @param noChecker 是否不用經過購買檢查
      */
     @NotNull
-    public BuyResult buy(final @NotNull Player player, final boolean checker) {
-        if (checker) {
-            if (this.buyCheck(player)) {
-                player.getInventory().addItem(this.giveItem);
-                return BuyResult.BUY_SUCCESS;
-            }
-
-            return BuyResult.BUY_ERROR;
+    public BuyResult buy(final @NotNull Player player, final boolean noChecker) {
+        if (noChecker) {
+            player.getInventory().addItem(this.giveItem);
+            return BuyResult.BUY_SUCCESS_NO_CHECKER;
         }
 
-        player.getInventory().addItem(this.giveItem);
-        return BuyResult.BUY_SUCCESS_NOT_CHECKER;
+        if (this.buyCheck(player)) {
+            player.getInventory().addItem(this.giveItem);
+            return BuyResult.BUY_SUCCESS;
+        }
+
+        return BuyResult.BUY_ERROR;
     }
 
     /**
@@ -203,7 +203,7 @@ public final class ShopObject
      * @param player 玩家
      * @return 是否可以購買
      */
-    public boolean buyCheck(final @NotNull Player player) {
+    private boolean buyCheck(final @NotNull Player player) {
         for (final Checker checker : this.checkerManager.getValues()) {
             if (!checker.check(this, player))
                 return false;

@@ -87,14 +87,8 @@ public interface Shop {
     /**
      * 購買該物品
      * @param player 玩家
+     * @param noChecker 是否不用經過購買檢查
      */
-    @NotNull BuyResult buy(@NotNull Player player, boolean checker);
-
-    /**
-     * 購買檢查
-     * @param player 玩家
-     * @return 是否可以購買
-     */
-    boolean buyCheck(@NotNull Player player);
+    @NotNull BuyResult buy(@NotNull Player player, boolean noChecker);
     
 }

@@ -42,15 +42,9 @@ public final class CommandBuy
 
         if (args.length >= 3) {
             @Nullable Result result = null;
-            final @Nullable Shop shop = MouBieShop.getShop(args[1], args[2]);
-
-            if (shop == null) {
-                sender.sendMessage(MouBieCat.PLUGIN_TITLE + "§c很抱歉，您所指定購買的商店不存在。");
-                return false;
-            }
 
             if (args.length == 3)
-                result = MouBieShop.buyShop(shop, (Player) sender, !sender.isOp());
+                result = MouBieShop.buyShop(args[1], args[2], (Player) sender, sender.isOp());
 
             if (result != null)
                 sender.sendMessage(MouBieCat.PLUGIN_TITLE + result.getMessage());

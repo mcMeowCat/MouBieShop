@@ -160,13 +160,19 @@ public final class MouBieShop {
 
     /**
      * 購買物品
-     * @param shop 商品
+     * @param store 店鋪名稱
+     * @param shop 商店名稱
      * @param player 購買者
      * @param noChecker 是否繞過購買檢測
      * @return 是否成功購買
      */
-    public static BuyResult buyShop(@NotNull Shop shop, @NotNull Player player, boolean noChecker) {
-        return shop.buy(player, noChecker);
+    @NotNull
+    public static BuyResult buyShop(@NotNull String store, @NotNull String shop, @NotNull Player player, boolean noChecker) {
+        final @Nullable Shop shopObj = MouBieShop.getShop(store, shop);
+        if (shopObj != null)
+            return shopObj.buy(player, noChecker);
+
+        return BuyResult.BUY_SUCCESS_ERROR_NOT_SHOP;
     }
 
 }
